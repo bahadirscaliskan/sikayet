@@ -5,52 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Şikayet ve Görev Yönetim Sistemi - Kayıt</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/metronic-theme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="login-container">
-            <div class="login-box">
-                <h1>Kayıt Ol</h1>
-                <p class="subtitle">Yeni hesap oluşturun</p>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>Kayıt Ol</h1>
+            <p class="subtitle">Yeni hesap oluşturun</p>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="full_name">Ad Soyad</label>
+                    <input type="text" id="full_name" name="full_name" required autocomplete="name">
+                </div>
                 
-                <form id="registerForm">
-                    <div class="form-group">
-                        <label for="full_name">Ad Soyad</label>
-                        <input type="text" id="full_name" name="full_name" required autocomplete="name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">E-posta</label>
-                        <input type="email" id="email" name="email" required autocomplete="email">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phone">Telefon (Opsiyonel)</label>
-                        <input type="tel" id="phone" name="phone" autocomplete="tel">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password">Şifre</label>
-                        <input type="password" id="password" name="password" required autocomplete="new-password" minlength="6">
-                        <small>En az 6 karakter</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password_confirm">Şifre Tekrar</label>
-                        <input type="password" id="password_confirm" name="password_confirm" required autocomplete="new-password" minlength="6">
-                    </div>
-                    
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary" id="registerBtn">Kayıt Ol</button>
-                    </div>
-                    
-                    <div class="form-group text-center">
-                        <p>Zaten hesabınız var mı? <a href="index.html">Giriş yapın</a></p>
-                    </div>
-                </form>
+                <div class="form-group">
+                    <label for="email">E-posta</label>
+                    <input type="email" id="email" name="email" required autocomplete="email">
+                </div>
                 
-                <div id="message" class="message"></div>
-            </div>
+                <div class="form-group">
+                    <label for="phone">Telefon (Opsiyonel)</label>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Şifre</label>
+                    <input type="password" id="password" name="password" required autocomplete="new-password" minlength="6">
+                    <small>En az 6 karakter</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password_confirm">Şifre Tekrar</label>
+                    <input type="password" id="password_confirm" name="password_confirm" required autocomplete="new-password" minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="registerBtn">Kayıt Ol</button>
+                </div>
+                
+                <div class="form-group text-center">
+                    <p>Zaten hesabınız var mı? <a href="index.html">Giriş yapın</a></p>
+                </div>
+            </form>
+            
+            <div id="message" class="message"></div>
         </div>
     </div>
     

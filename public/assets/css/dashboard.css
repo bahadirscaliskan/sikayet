@@ -1,11 +1,4 @@
-.navbar {
-    background-color: var(--card-bg);
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    padding: 0;
-}
+/* Navbar styles moved to metronic-theme.css */
 
 .nav-container {
     max-width: 1400px;
@@ -39,13 +32,7 @@
     min-height: calc(100vh - 70px);
 }
 
-.sidebar {
-    width: 250px;
-    background-color: var(--card-bg);
-    box-shadow: var(--shadow);
-    padding: 20px 0;
-    min-height: 100%;
-}
+/* Sidebar styles moved to metronic-theme.css */
 
 .sidebar-menu {
     list-style: none;

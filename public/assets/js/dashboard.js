@@ -59,7 +59,7 @@ function buildSidebar() {
         <ul class="sidebar-menu">
             ${menuItems.map(item => `
                 <li><a href="#" data-view="${item.id}" class="${item.id === currentView ? 'active' : ''}">
-                    ${item.icon} ${item.label}
+                    <span class="menu-icon">${item.icon}</span> ${item.label}
                 </a></li>
             `).join('')}
         </ul>
@@ -158,12 +158,18 @@ async function loadDashboard() {
             };
         }
         
-        const statsHTML = Object.keys(stats).map(key => `
-            <div class="stat-card ${key === 'total' ? 'primary' : key === 'completed' ? 'success' : 'warning'}">
+        const statsHTML = Object.keys(stats).map(key => {
+            let cardClass = 'primary';
+            if (key === 'completed') cardClass = 'success';
+            else if (key === 'pending' || key === 'assigned' || key === 'in_progress') cardClass = 'warning';
+            
+            return `
+            <div class="stat-card ${cardClass}">
                 <h3>${getStatusLabel(key)}</h3>
                 <div class="stat-value">${stats[key]}</div>
             </div>
-        `).join('');
+        `;
+        }).join('');
         
         const recentComplaints = complaints.slice(0, 5);
         const complaintsHTML = recentComplaints.length > 0 ? `
