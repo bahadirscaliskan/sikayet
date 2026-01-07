@@ -1,0 +1,7 @@
+[07-Jan-2026 20:45:49 Europe/Istanbul] PHP Warning:  Undefined array key "REQUEST_METHOD" in /Users/bahadir/Documents/cursor/config/config.php on line 27
+[07-Jan-2026 20:45:49 Europe/Istanbul] Database Connection Error: SQLSTATE[08006] [7] connection to server at "localhost" (::1), port 5432 failed: Operation not permitted
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Operation not permitted
+	Is the server running on that host and accepting TCP/IP connections?
+[07-Jan-2026 21:18:29 Europe/Istanbul] PHP Warning:  Undefined array key "REQUEST_URI" in /Users/bahadir/Documents/cursor/config/config.php on line 26
+[07-Jan-2026 21:18:29 Europe/Istanbul] PHP Deprecated:  strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in /Users/bahadir/Documents/cursor/config/config.php on line 26

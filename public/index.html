@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şikayet ve Görev Yönetim Sistemi - Giriş</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="login-box">
+                <h1>Şikayet Yönetim Sistemi</h1>
+                <p class="subtitle">Hesabınıza giriş yapın</p>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">E-posta</label>
+                        <input type="email" id="email" name="email" required autocomplete="email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Şifre</label>
+                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="loginBtn">Giriş Yap</button>
+                    </div>
+                    
+                    <div class="form-group text-center">
+                        <p>Hesabınız yok mu? <a href="register.html">Kayıt olun</a></p>
+                    </div>
+                </form>
+                
+                <div id="message" class="message"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = window.location.origin + '/api';
+    </script>
+    <script src="assets/js/auth.js?v=3"></script>
+    <script src="assets/js/login.js?v=3"></script>
+</body>
+</html>
+

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Şikayet Yönetim Sistemi</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>Şikayet Yönetim Sistemi</h2>
+            </div>
+            <div class="nav-menu">
+                <span id="userName" class="nav-user"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Çıkış</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="dashboard-container">
+        <aside class="sidebar" id="sidebar">
+        </aside>
+        
+        <main class="main-content">
+            <div id="dashboardContent">
+            </div>
+        </main>
+    </div>
+    
+    <div id="complaintModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+    
+    <div id="newComplaintModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Yeni Şikayet Oluştur</h2>
+            <form id="newComplaintForm">
+                <div class="form-group">
+                    <label for="complaint_title">Başlık</label>
+                    <input type="text" id="complaint_title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="complaint_description">Açıklama</label>
+                    <textarea id="complaint_description" name="description" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="complaint_address">Adres</label>
+                    <input type="text" id="complaint_address" name="address">
+                </div>
+                <div class="form-group">
+                    <label>Konum</label>
+                    <button type="button" id="getLocationBtn" class="btn btn-secondary">Konumumu Al</button>
+                    <input type="hidden" id="complaint_latitude" name="latitude">
+                    <input type="hidden" id="complaint_longitude" name="longitude">
+                    <small id="locationStatus"></small>
+                </div>
+                <div class="form-group">
+                    <label for="complaint_photos">Fotoğraflar</label>
+                    <input type="file" id="complaint_photos" name="photos[]" multiple accept="image/*">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Şikayet Oluştur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal: Yeni Kullanıcı (Admin için) -->
+    <div id="newUserModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Yeni Kullanıcı Ekle</h2>
+            <form id="newUserForm">
+                <div class="form-group">
+                    <label for="user_email">E-posta *</label>
+                    <input type="email" id="user_email" required>
+                </div>
+                <div class="form-group">
+                    <label for="user_full_name">Ad Soyad *</label>
+                    <input type="text" id="user_full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="user_phone">Telefon</label>
+                    <input type="tel" id="user_phone">
+                </div>
+                <div class="form-group">
+                    <label for="user_role">Rol *</label>
+                    <select id="user_role" required>
+                        <option value="citizen">Vatandaş</option>
+                        <option value="staff">Personel</option>
+                        <option value="admin">Yönetici</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="user_password">Şifre *</label>
+                    <input type="password" id="user_password" required minlength="6">
+                    <small>En az 6 karakter</small>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Kullanıcı Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // API_BASE_URL global olarak tanımla
+        window.API_BASE_URL = window.location.origin + '/api';
+        console.log('API_BASE_URL initialized:', window.API_BASE_URL);
+    </script>
+    <script src="assets/js/auth.js?v=5"></script>
+    <script>
+        console.log('auth.js loaded, checkAuth:', typeof checkAuth);
+    </script>
+    <script src="assets/js/api.js?v=5"></script>
+    <script>
+        console.log('api.js loaded, listComplaints:', typeof listComplaints, 'getProfile:', typeof getProfile);
+    </script>
+    <script src="assets/js/dashboard.js?v=5"></script>
+    <script>
+        console.log('dashboard.js loaded');
+    </script>
+</body>
+</html>
+

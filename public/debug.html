@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>API Debug</title>
+</head>
+<body>
+    <h1>API Debug Test</h1>
+    <button onclick="testAPI()">Test API</button>
+    <div id="result"></div>
+    
+    <script>
+        const API_BASE_URL = window.location.origin + '/api';
+        
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Test ediliyor...</p>';
+            
+            try {
+                // Test 1: Check Auth
+                console.log('Test 1: Check Auth');
+                const authResponse = await fetch(API_BASE_URL + '/check_auth.php', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
+                console.log('Auth Response Status:', authResponse.status);
+                console.log('Auth Response Headers:', [...authResponse.headers.entries()]);
+                const authData = await authResponse.json();
+                console.log('Auth Data:', authData);
+                
+                if (!authData.success) {
+                    resultDiv.innerHTML = '<p style="color: red;">Oturum açılmamış. Lütfen önce giriş yapın.</p>';
+                    return;
+                }
+                
+                // Test 2: Get Profile
+                console.log('Test 2: Get Profile');
+                const profileResponse = await fetch(API_BASE_URL + '/get_profile.php', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
+                console.log('Profile Response Status:', profileResponse.status);
+                const profileData = await profileResponse.json();
+                console.log('Profile Data:', profileData);
+                
+                // Test 3: List Complaints
+                console.log('Test 3: List Complaints');
+                const complaintsResponse = await fetch(API_BASE_URL + '/list_complaints.php', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
+                console.log('Complaints Response Status:', complaintsResponse.status);
+                const complaintsData = await complaintsResponse.json();
+                console.log('Complaints Data:', complaintsData);
+                
+                resultDiv.innerHTML = `
+                    <h2>Test Sonuçları:</h2>
+                    <h3>Auth:</h3>
+                    <pre>${JSON.stringify(authData, null, 2)}</pre>
+                    <h3>Profile:</h3>
+                    <pre>${JSON.stringify(profileData, null, 2)}</pre>
+                    <h3>Complaints:</h3>
+                    <pre>${JSON.stringify(complaintsData, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                console.error('Test Error:', error);
+                resultDiv.innerHTML = `<p style="color: red;">Hata: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
+
