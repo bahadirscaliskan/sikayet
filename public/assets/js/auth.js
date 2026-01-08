@@ -7,17 +7,17 @@ function checkAuth() {
         method: 'GET',
         credentials: 'same-origin'
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            return data.data;
-        }
-        return null;
-    })
-    .catch(error => {
-        console.error('Auth check error:', error);
-        return null;
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                return data.data;
+            }
+            return null;
+        })
+        .catch(error => {
+            console.error('Auth check error:', error);
+            return null;
+        });
 }
 
 function login(email, password) {
@@ -30,7 +30,7 @@ function login(email, password) {
         credentials: 'same-origin',
         body: JSON.stringify({ email, password })
     })
-    .then(response => response.json());
+        .then(response => response.json());
 }
 
 function register(userData) {
@@ -43,7 +43,7 @@ function register(userData) {
         credentials: 'same-origin',
         body: JSON.stringify(userData)
     })
-    .then(response => response.json());
+        .then(response => response.json());
 }
 
 function logout() {
@@ -52,12 +52,12 @@ function logout() {
         method: 'POST',
         credentials: 'same-origin'
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.href = 'index.html';
-        }
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = 'index.html';
+            }
+        });
 }
 
 function showMessage(elementId, message, type = 'info') {
@@ -65,7 +65,7 @@ function showMessage(elementId, message, type = 'info') {
     if (messageEl) {
         messageEl.textContent = message;
         messageEl.className = `message ${type} show`;
-        
+
         setTimeout(() => {
             messageEl.classList.remove('show');
         }, 5000);
@@ -79,5 +79,30 @@ function requireAuth(redirectTo = 'index.html') {
         }
         return user;
     });
+}
+
+// Google Auth Callback
+function handleCredentialResponse(response) {
+    const API = (typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : (window.location.origin + '/api'));
+
+    fetch(API + '/auth_google.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ credential: response.credential })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Google ile giriş başarısız: ' + (data.message || 'Bilinmeyen hata'));
+            }
+        })
+        .catch(err => {
+            console.error('Google Auth Error:', err);
+            alert('Google ile giriş sırasında bir hata oluştu');
+        });
 }
 

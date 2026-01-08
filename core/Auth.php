@@ -37,6 +37,11 @@ class Auth {
             if (!$user['is_active']) {
                 return ['success' => false, 'message' => 'Hesabınız aktif değil'];
             }
+
+            // E-posta doğrulama kontrolü
+            if (!$user['email_verified']) {
+                return ['success' => false, 'message' => 'Lütfen giriş yapmadan önce e-posta adresinizi doğrulayın.'];
+            }
             
             if (!password_verify($password, $user['password_hash'])) {
                 return ['success' => false, 'message' => 'E-posta veya şifre hatalı'];
@@ -64,6 +69,53 @@ class Auth {
             ];
         } catch (PDOException $e) {
             error_log("Login Error: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Bir hata oluştu'];
+        }
+    }
+
+    /**
+     * ID ile kullanıcı girişi (Google Auth vb. için)
+     */
+    public function loginById($userId) {
+        try {
+            $stmt = $this->db->prepare("
+                SELECT id, email, full_name, role, is_active 
+                FROM users 
+                WHERE id = :id
+            ");
+            $stmt->execute(['id' => $userId]);
+            $user = $stmt->fetch();
+            
+            if (!$user) {
+                return ['success' => false, 'message' => 'Kullanıcı bulunamadı'];
+            }
+            
+            if (!$user['is_active']) {
+                return ['success' => false, 'message' => 'Hesabınız aktif değil'];
+            }
+            
+            // Son giriş zamanını güncelle
+            $updateStmt = $this->db->prepare("UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = :id");
+            $updateStmt->execute(['id' => $user['id']]);
+            
+            // Session oluştur
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_name'] = $user['full_name'];
+            $_SESSION['user_role'] = $user['role'];
+            
+            return [
+                'success' => true,
+                'message' => 'Giriş başarılı',
+                'user' => [
+                    'id' => $user['id'],
+                    'email' => $user['email'],
+                    'full_name' => $user['full_name'],
+                    'role' => $user['role']
+                ]
+            ];
+        } catch (PDOException $e) {
+            error_log("LoginById Error: " . $e->getMessage());
             return ['success' => false, 'message' => 'Bir hata oluştu'];
         }
     }
@@ -100,11 +152,16 @@ class Auth {
             
             $user = $stmt->fetch();
             
-            // TODO: E-posta doğrulama maili gönder (verification_token ile)
+            $user = $stmt->fetch();
+            
+            // E-posta doğrulama maili gönder
+            require_once __DIR__ . '/MailService.php';
+            $mailService = new MailService();
+            $mailService->sendVerificationEmail($email, $verificationToken);
             
             return [
                 'success' => true,
-                'message' => 'Kayıt başarılı. Lütfen e-postanızı doğrulayın.',
+                'message' => 'Kayıt başarılı. Lütfen e-postanıza gönderilen doğrulama linkine tıklayın.',
                 'user' => $user
             ];
         } catch (PDOException $e) {

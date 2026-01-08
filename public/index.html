@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,10 @@
     <link rel="stylesheet" href="assets/css/metronic-theme.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div class="login-container">
         <div class="login-decoration">
@@ -21,12 +24,12 @@
             <div class="login-header">
                 <div class="login-logo">
                     <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="60" height="60" rx="12" fill="url(#gradient)"/>
-                        <path d="M30 15L20 25V45H25V30H35V45H40V25L30 15Z" fill="white"/>
+                        <rect width="60" height="60" rx="12" fill="url(#gradient)" />
+                        <path d="M30 15L20 25V45H25V30H35V45H40V25L30 15Z" fill="white" />
                         <defs>
                             <linearGradient id="gradient" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#009ef7"/>
-                                <stop offset="1" stop-color="#7239ea"/>
+                                <stop stop-color="#009ef7" />
+                                <stop offset="1" stop-color="#7239ea" />
                             </linearGradient>
                         </defs>
                     </svg>
@@ -34,51 +37,80 @@
                 <h1>Şikayet Yönetim Sistemi</h1>
                 <p class="subtitle">Hesabınıza giriş yapın</p>
             </div>
-            
+
             <form id="loginForm" class="login-form">
                 <div class="form-group">
                     <label for="email">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2.5 6.66667L10 11.6667L17.5 6.66667M3.33333 15H16.6667C17.5871 15 18.3333 14.2538 18.3333 13.3333V6.66667C18.3333 5.74619 17.5871 5 16.6667 5H3.33333C2.41286 5 1.66667 5.74619 1.66667 6.66667V13.3333C1.66667 14.2538 2.41286 15 3.33333 15Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path
+                                d="M2.5 6.66667L10 11.6667L17.5 6.66667M3.33333 15H16.6667C17.5871 15 18.3333 14.2538 18.3333 13.3333V6.66667C18.3333 5.74619 17.5871 5 16.6667 5H3.33333C2.41286 5 1.66667 5.74619 1.66667 6.66667V13.3333C1.66667 14.2538 2.41286 15 3.33333 15Z"
+                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                         E-posta
                     </label>
-                    <input type="email" id="email" name="email" required autocomplete="email" placeholder="ornek@email.com">
+                    <input type="email" id="email" name="email" required autocomplete="email"
+                        placeholder="ornek@email.com">
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="password">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15.8333 9.16667H4.16667C3.24619 9.16667 2.5 9.91286 2.5 10.8333V16.6667C2.5 17.5871 3.24619 18.3333 4.16667 18.3333H15.8333C16.7538 18.3333 17.5 17.5871 17.5 16.6667V10.8333C17.5 9.91286 16.7538 9.16667 15.8333 9.16667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M5.83333 9.16667V5.83333C5.83333 4.72826 6.27232 3.66846 7.05372 2.88706C7.83512 2.10565 8.89493 1.66667 10 1.66667C11.1051 1.66667 12.1649 2.10565 12.9463 2.88706C13.7277 3.66846 14.1667 4.72826 14.1667 5.83333V9.16667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        Şifre
-                    </label>
-                    <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="••••••••">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label for="password" style="margin-bottom: 0;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M15.8333 9.16667H4.16667C3.24619 9.16667 2.5 9.91286 2.5 10.8333V16.6667C2.5 17.5871 3.24619 18.3333 4.16667 18.3333H15.8333C16.7538 18.3333 17.5 17.5871 17.5 16.6667V10.8333C17.5 9.91286 16.7538 9.16667 15.8333 9.16667Z"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path
+                                    d="M5.83333 9.16667V5.83333C5.83333 4.72826 6.27232 3.66846 7.05372 2.88706C7.83512 2.10565 8.89493 1.66667 10 1.66667C11.1051 1.66667 12.1649 2.10565 12.9463 2.88706C13.7277 3.66846 14.1667 4.72826 14.1667 5.83333V9.16667"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            Şifre
+                        </label>
+                        <a href="forgot_password.html"
+                            style="font-size: 0.85rem; color: #009ef7; text-decoration: none;">Şifremi Unuttum?</a>
+                    </div>
+                    <input type="password" id="password" name="password" required autocomplete="current-password"
+                        placeholder="••••••••">
                 </div>
-                
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
                         <span>Giriş Yap</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </button>
                 </div>
-                
+
+                <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; text-align: center;">
+                    <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                        data-callback="handleCredentialResponse" data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"
+                        data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left" data-width="100%">
+                    </div>
+                </div>
+
                 <div class="login-footer">
                     <p>Hesabınız yok mu? <a href="register.html">Kayıt olun</a></p>
                 </div>
             </form>
-            
+
             <div id="message" class="message"></div>
         </div>
     </div>
-    
+
     <script>
         const API_BASE_URL = window.location.origin + '/api';
     </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="assets/js/auth.js?v=3"></script>
     <script src="assets/js/login.js?v=3"></script>
 </body>
+
 </html>
