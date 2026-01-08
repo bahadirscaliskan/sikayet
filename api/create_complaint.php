@@ -49,7 +49,7 @@ try {
         'latitude' => $input['latitude'] ?? null,
         'longitude' => $input['longitude'] ?? null,
         'address' => $input['address'] ?? null,
-        'priority' => $input['priority'] ?? 'medium'
+        'priority' => $input['priority'] ?? null
     ]);
     
     $complaint = $stmt->fetch();

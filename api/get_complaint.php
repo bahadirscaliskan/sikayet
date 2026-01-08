@@ -55,24 +55,47 @@ try {
     $photoStmt->execute(['complaint_id' => $complaintId]);
     $complaint['photos'] = $photoStmt->fetchAll();
     
-    $commentStmt = $db->prepare("
-        SELECT 
-            co.id,
-            co.comment_text,
-            co.is_internal,
-            co.created_at,
-            u.full_name as user_name,
-            u.role as user_role
-        FROM comments co
-        LEFT JOIN users u ON co.user_id = u.id
-        WHERE co.complaint_id = :complaint_id
-        AND (co.is_internal = FALSE OR :user_role IN ('admin', 'staff'))
-        ORDER BY co.created_at ASC
-    ");
-    $commentStmt->execute([
-        'complaint_id' => $complaintId,
-        'user_role' => $user['role']
-    ]);
+    // Yorumları çek - vatandaşlar için sadece internal olmayan yorumlar, yetkililer için tüm yorumlar
+    if ($user['role'] === 'citizen') {
+        // Vatandaş kullanıcıları için sadece public (internal olmayan) yorumlar
+        $commentStmt = $db->prepare("
+            SELECT 
+                co.id,
+                co.user_id,
+                co.comment_text,
+                co.is_internal,
+                co.created_at,
+                u.full_name as user_name,
+                u.role as user_role
+            FROM comments co
+            LEFT JOIN users u ON co.user_id = u.id
+            WHERE co.complaint_id = :complaint_id
+            AND (co.is_internal = false OR co.is_internal IS NULL)
+            ORDER BY co.created_at ASC
+        ");
+        $commentStmt->execute([
+            'complaint_id' => $complaintId
+        ]);
+    } else {
+        // Admin ve staff için tüm yorumlar (hem internal hem public)
+        $commentStmt = $db->prepare("
+            SELECT 
+                co.id,
+                co.user_id,
+                co.comment_text,
+                co.is_internal,
+                co.created_at,
+                u.full_name as user_name,
+                u.role as user_role
+            FROM comments co
+            LEFT JOIN users u ON co.user_id = u.id
+            WHERE co.complaint_id = :complaint_id
+            ORDER BY co.created_at ASC
+        ");
+        $commentStmt->execute([
+            'complaint_id' => $complaintId
+        ]);
+    }
     $complaint['comments'] = $commentStmt->fetchAll();
     
     $logStmt = $db->prepare("

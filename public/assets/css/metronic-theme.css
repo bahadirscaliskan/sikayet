@@ -772,6 +772,143 @@ table tbody tr:last-child td {
     flex-wrap: wrap;
 }
 
+/* Comment Form Section */
+.comment-form-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+}
+
+.comment-form-section h3 {
+    margin: 0 0 1.25rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.comment-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1.5px solid var(--gray-300);
+    border-radius: var(--radius);
+    font-size: 0.925rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.2s ease;
+    background: #ffffff;
+    color: var(--gray-700);
+}
+
+.comment-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(0, 158, 247, 0.1);
+}
+
+.comment-textarea::placeholder {
+    color: var(--gray-400);
+}
+
+/* Internal Comment Checkbox */
+.internal-comment-checkbox {
+    margin: 1rem 0;
+}
+
+.internal-comment-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.internal-comment-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.925rem;
+    color: var(--gray-700);
+    transition: color 0.2s ease;
+}
+
+.internal-comment-checkbox label:hover {
+    color: var(--gray-900);
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--gray-400);
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    background: #ffffff;
+}
+
+.internal-comment-checkbox input[type="checkbox"]:checked + label .checkbox-custom {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.internal-comment-checkbox input[type="checkbox"]:checked + label .checkbox-custom::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.internal-comment-checkbox input[type="checkbox"]:checked + label {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.checkbox-label {
+    line-height: 1.5;
+}
+
+/* Comment Form Actions */
+.comment-form-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.comment-form-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+}
+
+/* Status Action Buttons */
+.status-action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+.status-action-buttons .btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-weight: 600;
+}
+
+.status-action-buttons .btn svg {
+    flex-shrink: 0;
+}
+
 /* Login Page - Metronic Style */
 .login-container {
     min-height: 100vh;

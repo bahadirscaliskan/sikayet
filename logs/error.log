@@ -9,3 +9,171 @@ connection to server at "localhost" (127.0.0.1), port 5432 failed: Operation not
 CONTEXT:  unnamed portal parameter $4 = ''
 [07-Jan-2026 22:50:00 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
 CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 10:54:05 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 10:54:28 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 10:56:33 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 10:56:38 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 11:01:25 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 11:01:25 Europe/Istanbul] Add Comment Error Trace: #0 /Users/bahadir/Documents/cursor/api/add_comment.php(66): PDOStatement->execute(Array)
+#1 {main}
+[08-Jan-2026 11:01:42 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 11:01:42 Europe/Istanbul] Add Comment Error Trace: #0 /Users/bahadir/Documents/cursor/api/add_comment.php(66): PDOStatement->execute(Array)
+#1 {main}
+[08-Jan-2026 11:02:29 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 11:02:29 Europe/Istanbul] Add Comment Error Trace: #0 /Users/bahadir/Documents/cursor/api/add_comment.php(66): PDOStatement->execute(Array)
+#1 {main}
+[08-Jan-2026 11:03:43 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 11:03:43 Europe/Istanbul] Add Comment Error Trace: #0 /Users/bahadir/Documents/cursor/api/add_comment.php(66): PDOStatement->execute(Array)
+#1 {main}
+[08-Jan-2026 11:04:31 Europe/Istanbul] Add Comment Error: SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type boolean: ""
+CONTEXT:  unnamed portal parameter $4 = ''
+[08-Jan-2026 11:04:31 Europe/Istanbul] Add Comment Error Trace: #0 /Users/bahadir/Documents/cursor/api/add_comment.php(66): PDOStatement->execute(Array)
+#1 {main}
+[08-Jan-2026 11:19:00 Europe/Istanbul] Update Comment Error: SQLSTATE[42703]: Undefined column: 7 ERROR:  column "updated_at" does not exist
+LINE 6: ..., user_id, comment_text, is_internal, created_at, updated_at
+                                                             ^
+HINT:  Perhaps you meant to reference the column "comments.created_at".
+[08-Jan-2026 11:19:04 Europe/Istanbul] Update Comment Error: SQLSTATE[42703]: Undefined column: 7 ERROR:  column "updated_at" does not exist
+LINE 6: ..., user_id, comment_text, is_internal, created_at, updated_at
+                                                             ^
+HINT:  Perhaps you meant to reference the column "comments.created_at".
+[08-Jan-2026 11:19:16 Europe/Istanbul] Update Comment Error: SQLSTATE[42703]: Undefined column: 7 ERROR:  column "updated_at" does not exist
+LINE 6: ..., user_id, comment_text, is_internal, created_at, updated_at
+                                                             ^
+HINT:  Perhaps you meant to reference the column "comments.created_at".
+[08-Jan-2026 11:19:19 Europe/Istanbul] Update Comment Error: SQLSTATE[42703]: Undefined column: 7 ERROR:  column "updated_at" does not exist
+LINE 6: ..., user_id, comment_text, is_internal, created_at, updated_at
+                                                             ^
+HINT:  Perhaps you meant to reference the column "comments.created_at".
+[08-Jan-2026 11:19:30 Europe/Istanbul] Update Comment Error: SQLSTATE[42703]: Undefined column: 7 ERROR:  column "updated_at" does not exist
+LINE 6: ..., user_id, comment_text, is_internal, created_at, updated_at
+                                                             ^
+HINT:  Perhaps you meant to reference the column "comments.created_at".
+[08-Jan-2026 11:19:35 Europe/Istanbul] Update Comment Error: SQLSTATE[42703]: Undefined column: 7 ERROR:  column "updated_at" does not exist
+LINE 6: ..., user_id, comment_text, is_internal, created_at, updated_at
+                                                             ^
+HINT:  Perhaps you meant to reference the column "comments.created_at".
+[08-Jan-2026 12:32:41 Europe/Istanbul] Update Complaint: Checking photos...
+[08-Jan-2026 12:32:41 Europe/Istanbul] Update Complaint: Photos array found: Array
+(
+    [name] => Array
+        (
+            [0] => speed-svgrepo-com.svg
+        )
+
+    [full_path] => Array
+        (
+            [0] => speed-svgrepo-com.svg
+        )
+
+    [type] => Array
+        (
+            [0] => image/svg+xml
+        )
+
+    [tmp_name] => Array
+        (
+            [0] => /private/var/folders/ry/drxcp2tx2y37xx8rlmhqtcn80000gn/T/phpk7psqj8rifso3iBdmZr
+        )
+
+    [error] => Array
+        (
+            [0] => 0
+        )
+
+    [size] => Array
+        (
+            [0] => 747
+        )
+
+)
+
+[08-Jan-2026 12:32:41 Europe/Istanbul] Update Complaint: Config - UPLOAD_DIR: /Users/bahadir/Documents/cursor/config/../uploads/
+[08-Jan-2026 12:32:41 Europe/Istanbul] Update Complaint: Processing file: speed-svgrepo-com.svg (image/svg+xml, 747)
+[08-Jan-2026 12:32:41 Europe/Istanbul] Update Complaint: Invalid file type: image/svg+xml
+[08-Jan-2026 12:33:43 Europe/Istanbul] Update Complaint: Checking photos...
+[08-Jan-2026 12:33:43 Europe/Istanbul] Update Complaint: Photos array found: Array
+(
+    [name] => Array
+        (
+            [0] => speed-svgrepo-com.svg
+        )
+
+    [full_path] => Array
+        (
+            [0] => speed-svgrepo-com.svg
+        )
+
+    [type] => Array
+        (
+            [0] => image/svg+xml
+        )
+
+    [tmp_name] => Array
+        (
+            [0] => /private/var/folders/ry/drxcp2tx2y37xx8rlmhqtcn80000gn/T/phplc6stdl8n6vc4bXt2OV
+        )
+
+    [error] => Array
+        (
+            [0] => 0
+        )
+
+    [size] => Array
+        (
+            [0] => 747
+        )
+
+)
+
+[08-Jan-2026 12:33:43 Europe/Istanbul] Update Complaint: Config - UPLOAD_DIR: /Users/bahadir/Documents/cursor/config/../uploads/
+[08-Jan-2026 12:33:43 Europe/Istanbul] Update Complaint: Processing file: speed-svgrepo-com.svg (image/svg+xml, 747)
+[08-Jan-2026 12:33:43 Europe/Istanbul] Update Complaint: Invalid file type: image/svg+xml
+[08-Jan-2026 12:35:44 Europe/Istanbul] Update Complaint: Checking photos...
+[08-Jan-2026 12:35:44 Europe/Istanbul] Update Complaint: Photos array found: Array
+(
+    [name] => Array
+        (
+            [0] => speed-svgrepo-com.svg
+        )
+
+    [full_path] => Array
+        (
+            [0] => speed-svgrepo-com.svg
+        )
+
+    [type] => Array
+        (
+            [0] => image/svg+xml
+        )
+
+    [tmp_name] => Array
+        (
+            [0] => /private/var/folders/ry/drxcp2tx2y37xx8rlmhqtcn80000gn/T/phpnlba7vo950qm4dGgNPL
+        )
+
+    [error] => Array
+        (
+            [0] => 0
+        )
+
+    [size] => Array
+        (
+            [0] => 747
+        )
+
+)
+
+[08-Jan-2026 12:35:44 Europe/Istanbul] Update Complaint: Config - UPLOAD_DIR: /Users/bahadir/Documents/cursor/config/../uploads/
+[08-Jan-2026 12:35:44 Europe/Istanbul] Update Complaint: Processing file: speed-svgrepo-com.svg (image/svg+xml, 747)
+[08-Jan-2026 12:35:44 Europe/Istanbul] Update Complaint: Invalid file type: image/svg+xml
+[08-Jan-2026 12:40:23 Europe/Istanbul] Update Complaint Error: SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "complaint_photos" violates check constraint "complaint_photos_photo_type_check"
+DETAIL:  Failing row contains (6, 5, complaints/complaint_695f7b87d8763_1767865223.svg, during, 3, 2026-01-08 12:40:23.887615).

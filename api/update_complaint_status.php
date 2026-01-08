@@ -59,7 +59,14 @@ try {
         'id' => $complaintId
     ];
     
-    $updateQuery = "UPDATE complaints SET status = :status, updated_at = CURRENT_TIMESTAMP";
+    $updateQuery = "UPDATE complaints SET status = :status";
+    
+    if (isset($input['priority']) && in_array($input['priority'], ['low', 'medium', 'high', 'urgent'])) {
+        $updateQuery .= ", priority = :priority";
+        $updateData['priority'] = $input['priority'];
+    }
+    
+    $updateQuery .= ", updated_at = CURRENT_TIMESTAMP";
     
     if ($newStatus === 'completed') {
         $updateQuery .= ", completed_at = CURRENT_TIMESTAMP";

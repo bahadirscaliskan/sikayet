@@ -40,7 +40,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/api/') !== false) {
 define('BASE_URL', 'http://localhost');
 define('UPLOAD_DIR', __DIR__ . '/../uploads/');
 define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
-define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/png', 'image/jpg', 'image/gif']);
+define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp', 'image/svg+xml']);
 
 // Upload klasörünü oluştur
 if (!file_exists(UPLOAD_DIR)) {

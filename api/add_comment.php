@@ -29,7 +29,22 @@ if ($validation !== true) {
 
 $complaintId = (int)$input['complaint_id'];
 $commentText = trim($input['comment_text']);
-$isInternal = isset($input['is_internal']) && $input['is_internal'] === true;
+
+// is_internal değeri hem JSON boolean, hem string ("true"/"false") hem de 0/1 olarak gelebileceği için
+// hepsini güvenli bir şekilde booleana çeviriyoruz.
+$rawIsInternal = $input['is_internal'] ?? false;
+
+// PostgreSQL boolean için güvenli dönüşüm
+if (is_bool($rawIsInternal)) {
+    $isInternal = $rawIsInternal;
+} elseif (is_string($rawIsInternal)) {
+    $rawIsInternal = trim(strtolower($rawIsInternal));
+    $isInternal = in_array($rawIsInternal, ['1', 'true', 'on', 'yes'], true);
+} elseif (is_numeric($rawIsInternal)) {
+    $isInternal = (bool)(int)$rawIsInternal;
+} else {
+    $isInternal = false;
+}
 
 if ($isInternal && !in_array($user['role'], ['admin', 'staff'])) {
     Response::error('Internal yorum yapma yetkiniz yok', 403);
@@ -54,16 +69,26 @@ try {
         RETURNING id, complaint_id, user_id, comment_text, is_internal, created_at
     ");
     
-    $stmt->execute([
-        'complaint_id' => $complaintId,
-        'user_id' => $user['id'],
-        'comment_text' => $commentText,
-        'is_internal' => $isInternal
-    ]);
+    // PostgreSQL boolean için PDO::PARAM_BOOL kullan
+    $stmt->bindValue(':complaint_id', $complaintId, PDO::PARAM_INT);
+    $stmt->bindValue(':user_id', $user['id'], PDO::PARAM_INT);
+    $stmt->bindValue(':comment_text', $commentText, PDO::PARAM_STR);
+    $stmt->bindValue(':is_internal', $isInternal, PDO::PARAM_BOOL);
+    $stmt->execute();
     
     $comment = $stmt->fetch();
-    $comment['user_name'] = $user['name'];
-    $comment['user_role'] = $user['role'];
+    if (!$comment) {
+        Response::error('Yorum oluşturulamadı', 500);
+    }
+    
+    // Kullanıcı bilgilerini al (Auth::checkAuth() 'name' döndürüyor, 'full_name' değil)
+    $userStmt = $db->prepare("SELECT full_name, role FROM users WHERE id = :id");
+    $userStmt->execute(['id' => $user['id']]);
+    $userInfo = $userStmt->fetch();
+    
+    // user_name için önce veritabanından gelen full_name'i kullan, yoksa session'daki name'i kullan
+    $comment['user_name'] = $userInfo['full_name'] ?? $user['name'] ?? 'Kullanıcı';
+    $comment['user_role'] = $userInfo['role'] ?? $user['role'] ?? 'unknown';
     
     $logStmt = $db->prepare("
         INSERT INTO activity_logs (complaint_id, user_id, action, description)
@@ -100,6 +125,10 @@ try {
     
 } catch (PDOException $e) {
     error_log("Add Comment Error: " . $e->getMessage());
-    Response::error('Yorum eklenirken bir hata oluştu', 500);
+    error_log("Add Comment Error Trace: " . $e->getTraceAsString());
+    Response::error('Yorum eklenirken bir hata oluştu: ' . $e->getMessage(), 500);
+} catch (Exception $e) {
+    error_log("Add Comment General Error: " . $e->getMessage());
+    Response::error('Yorum eklenirken bir hata oluştu: ' . $e->getMessage(), 500);
 }
 
