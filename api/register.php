@@ -18,7 +18,8 @@ if (!$input) {
 $validation = Validator::validate($input, [
     'email' => 'required|email',
     'password' => 'required|password',
-    'full_name' => 'required'
+    'full_name' => 'required',
+    'phone' => 'required'
 ]);
 
 if ($validation !== true) {
@@ -29,7 +30,8 @@ $result = $auth->register(
     $input['email'],
     $input['password'],
     $input['full_name'],
-    $input['phone'] ?? null
+    $input['phone'] ?? null,
+    $input['address'] ?? null
 );
 
 if ($result['success']) {

@@ -35,10 +35,11 @@ try {
         'id' => $input['user_id'],
         'full_name' => $input['full_name'],
         'phone' => $input['phone'] ?? null,
+        'address' => $input['address'] ?? null,
         'role' => $input['role']
     ];
     
-    $updateQuery = "UPDATE users SET full_name = :full_name, phone = :phone, role = :role";
+    $updateQuery = "UPDATE users SET full_name = :full_name, phone = :phone, address = :address, role = :role";
     
     // Şifre değiştiriliyorsa
     if (!empty($input['password'])) {

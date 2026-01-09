@@ -81,28 +81,5 @@ function requireAuth(redirectTo = 'index.html') {
     });
 }
 
-// Google Auth Callback
-function handleCredentialResponse(response) {
-    const API = (typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : (window.location.origin + '/api'));
 
-    fetch(API + '/auth_google.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ credential: response.credential })
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('Google ile giriş başarısız: ' + (data.message || 'Bilinmeyen hata'));
-            }
-        })
-        .catch(err => {
-            console.error('Google Auth Error:', err);
-            alert('Google ile giriş sırasında bir hata oluştu');
-        });
-}
 

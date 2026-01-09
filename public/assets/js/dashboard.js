@@ -41,7 +41,6 @@ function buildSidebar() {
         menuItems = [
             { id: 'dashboard', label: 'Dashboard', icon: '📊' },
             { id: 'my_complaints', label: 'Şikayetlerim', icon: '📝' },
-            { id: 'new_complaint', label: 'Yeni Şikayet', icon: '➕' },
             { id: 'profile', label: 'Profilim', icon: '👤' }
         ];
     } else if (currentUser.role === 'admin') {
@@ -233,7 +232,10 @@ async function loadComplaintsList(view, filters = {}) {
     content.innerHTML = '<div class="card"><p>Yükleniyor...</p></div>';
 
     try {
-        const result = await listComplaints(filters);
+        const [result, staffResult] = await Promise.all([
+            listComplaints(filters),
+            currentUser.role === 'admin' ? listStaff() : Promise.resolve({ success: true, data: [] })
+        ]);
 
         console.log('Complaints list result:', result);
 
@@ -244,6 +246,10 @@ async function loadComplaintsList(view, filters = {}) {
         }
 
         const complaints = (result.data && result.data.complaints) ? result.data.complaints : [];
+        const staffList = staffResult.success ? (staffResult.data || []) : [];
+
+        console.log('Staff list for complaints:', staffList);
+        console.log('Sample complaint assigned_to:', complaints.length > 0 ? complaints[0].assigned_to : 'no complaints');
 
         const title = view === 'my_complaints' ? 'Şikayetlerim' :
             view === 'all_complaints' ? 'Tüm Şikayetler' :
@@ -262,15 +268,28 @@ async function loadComplaintsList(view, filters = {}) {
                     </tr>
                 </thead>
                 <tbody>
-                    ${complaints.map(complaint => `
-                        <tr>
+                    ${complaints.map(complaint => {
+            const isAssigned = !!complaint.assigned_to;
+            // Removed row coloring for this view as requested
+            const rowClass = ''; 
+
+            // Find staff name if admin
+            let assignedStaffName = '-';
+            if (currentUser.role === 'admin' && complaint.assigned_to) {
+                assignedStaffName = complaint.assigned_to_name || 
+                                  (staffList.find(s => s.id == complaint.assigned_to)?.full_name) || 
+                                  'Personel';
+            }
+
+            return `
+                        <tr class="${rowClass}">
                             <td>${complaint.title}</td>
                             <td><span class="status-badge ${complaint.status}">${getStatusLabel(complaint.status)}</span></td>
                             <td><span class="priority-badge ${complaint.priority}">${getPriorityLabel(complaint.priority)}</span></td>
                             <td>${formatDate(complaint.created_at)}</td>
                             ${currentUser.role === 'admin' ? `
                                 <td>${complaint.user_name || '-'}</td>
-                                <td>${complaint.assigned_to_name || '-'}</td>
+                                <td>${assignedStaffName}</td>
                             ` : ''}
                             <td>
                                 <div style="display: flex; gap: 4px; flex-wrap: nowrap; align-items: center; width: 100%;">
@@ -282,7 +301,7 @@ async function loadComplaintsList(view, filters = {}) {
                                         Detay
                                     </button>
                                     
-                                    ${complaint.status === 'pending' ? `
+                                    ${(complaint.status === 'pending' || (currentUser.role === 'admin' && view === 'all_complaints')) ? `
                                         <button class="btn btn-sm btn-info" onclick="showEditComplaintModal(${complaint.id})" style="display: inline-flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; padding: 4px 8px; font-size: 12px; flex: 1;">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -299,12 +318,14 @@ async function loadComplaintsList(view, filters = {}) {
                                         </button>
                                     ` : `
                                         ${canUpdateStatus(complaint) ? `
+                                            ${currentUser.role !== 'staff' ? `
                                             <button class="btn btn-sm btn-success" onclick="updateStatus(${complaint.id}, 'in_progress')" style="display: inline-flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; padding: 4px 8px; font-size: 12px; flex: 1;">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M14.7 6.30005L9 12L14.7 17.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                 </svg>
                                                 İşleme Al
                                             </button>
+                                            ` : ''}
                                             <button class="btn btn-sm btn-primary" onclick="updateStatus(${complaint.id}, 'completed')" style="display: inline-flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; padding: 4px 8px; font-size: 12px; flex: 1;">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -317,14 +338,22 @@ async function loadComplaintsList(view, filters = {}) {
                                 </div>
                             </td>
                         </tr>
-                    `).join('')}
+                    `}).join('')}
                 </tbody>
             </table>
-        ` : '<p>Henüz şikayet bulunmamaktadır.</p>';
+            ` : '<p>Henüz şikayet bulunmamaktadır.</p>';
 
         content.innerHTML = `
             <div class="page-header">
                 <h1>${title}</h1>
+                ${view === 'my_complaints' && currentUser.role === 'citizen' ? `
+                    <button class="btn btn-primary" onclick="showNewComplaintModal()" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Yeni Şikayet Ekle
+                    </button>
+                ` : ''}
             </div>
             
             <div class="card">
@@ -502,6 +531,7 @@ async function showComplaintDetail(id) {
                 
                 ${canUpdateStatus(complaint) ? `
                     <div class="status-action-buttons">
+                        ${currentUser.role !== 'staff' ? `
                         <button class="btn btn-success" onclick="updateStatus(${complaint.id}, 'in_progress')">
                             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" stroke="currentColor" stroke-width="2"/>
@@ -509,6 +539,7 @@ async function showComplaintDetail(id) {
                             </svg>
                             İşleme Al
                         </button>
+                        ` : ''}
                         <button class="btn btn-primary" onclick="updateStatus(${complaint.id}, 'completed')">
                             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M16 6L7 15L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1087,7 +1118,7 @@ async function loadAssignTasks() {
 
     try {
         const [complaintsResult, staffResult] = await Promise.all([
-            listComplaints({ status: 'pending' }),
+            listComplaints({}), // Fetch all complaints
             listStaff()
         ]);
 
@@ -1099,46 +1130,93 @@ async function loadAssignTasks() {
             return;
         }
 
-        const complaints = complaintsResult.data.complaints || [];
+        let complaints = complaintsResult.data.complaints || [];
         const staff = staffResult.data || [];
 
+        console.log('Staff list for assignment:', staff);
+        console.log('Sample complaint assigned_to:', complaints.length > 0 ? complaints[0].assigned_to : 'no complaints');
+
+        // Filter out completed/closed if desired, or keep all. 
+        // User said "all complaints should be visible". 
+        // But usually only active ones need assignment. 
+        // Let's sort them: unassigned first, then assigned.
+        complaints.sort((a, b) => {
+            if (a.assigned_to && !b.assigned_to) return 1;
+            if (!a.assigned_to && b.assigned_to) return -1;
+            return new Date(b.created_at) - new Date(a.created_at);
+        });
+
         const complaintsHTML = complaints.length > 0 ? `
+            <style>
+                .assigned-row { background-color: #d1fae5 !important; } /* Greenish */
+                .unassigned-row { background-color: #f3f4f6 !important; } /* Grayish */
+                .assigned-row:hover { background-color: #a7f3d0 !important; }
+                .unassigned-row:hover { background-color: #e5e7eb !important; }
+            </style>
             <table>
                 <thead>
                     <tr>
                         <th>Başlık</th>
                         <th>Kullanıcı</th>
+                        <th>Durum</th>
                         <th>Oluşturulma</th>
+                        <th>Atanan Personel</th>
                         <th>Atama</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${complaints.map(complaint => `
-                        <tr>
+                    ${complaints.map(complaint => {
+            const isAssigned = !!complaint.assigned_to;
+            const rowClass = isAssigned ? 'assigned-row' : 'unassigned-row';
+
+            // Find assigned staff name
+            // Use backend provided name first, fallback to staff lookup
+            const assignedName = complaint.assigned_to_name || (complaint.assigned_to 
+                ? (staff.find(s => s.id == complaint.assigned_to)?.full_name || '-') 
+                : '-');
+            
+            // Apply inline style to ensure green background for assigned tasks
+            const rowStyle = isAssigned ? 'background-color: #d1fae5;' : '';
+
+            return `
+                        <tr class="${rowClass}" style="${rowStyle}">
                             <td>${complaint.title}</td>
                             <td>${complaint.user_name || '-'}</td>
+                            <td><span class="status-badge ${complaint.status}">${getStatusLabel(complaint.status)}</span></td>
                             <td>${formatDate(complaint.created_at)}</td>
+                            <td>${assignedName}</td>
                             <td>
                                 <div style="display: flex; gap: 8px; align-items: center; max-width: 300px;">
                                     <select id="assign_${complaint.id}" class="form-control" style="flex: 1; padding: 6px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.9em; background-color: #fff; cursor: pointer;">
-                                        <option value="">Personel Seçin</option>
-                                        ${staff.map(s => `<option value="${s.id}">${s.full_name}</option>`).join('')}
+                                        <option value="">${isAssigned ? 'Personel Değiştir' : 'Personel Seçin'}</option>
+                                        ${staff.map(s => {
+                const selected = s.id == complaint.assigned_to ? 'selected' : '';
+                return `<option value="${s.id}" ${selected}>${s.full_name}</option>`;
+            }).join('')}
                                     </select>
-                                    <button class="btn btn-sm btn-primary" onclick="assignComplaint(${complaint.id})" style="display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; padding: 6px 12px; height: 34px;">
+                                    <button class="btn btn-sm btn-primary" onclick="assignComplaint(${complaint.id}, '${complaint.priority || ''}')" style="display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; padding: 6px 12px; height: 34px;">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M17 11L19 13L23 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
-                                        Ata
+                                        ${isAssigned ? 'Güncelle' : 'Ata'}
                                     </button>
+                                    ${isAssigned ? `
+                                    <button class="btn btn-sm btn-danger" onclick="unassignComplaint(${complaint.id})" style="display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; padding: 6px 12px; height: 34px;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Kaldır
+                                    </button>
+                                    ` : ''}
                                 </div>
                             </td>
                         </tr>
-                    `).join('')}
+                    `}).join('')}
                 </tbody>
             </table>
-            ` : '<p>Atanacak bekleyen şikayet bulunmamaktadır.</p>';
+            ` : '<p>Şikayet bulunmamaktadır.</p>';
 
         content.innerHTML = `
             <div class="page-header">
@@ -1157,7 +1235,13 @@ async function loadAssignTasks() {
     }
 }
 
-async function assignComplaint(complaintId) {
+async function assignComplaint(complaintId, priority) {
+    // Check if priority is set
+    if (!priority || priority === 'null' || priority === 'undefined') {
+        alert('Lütfen görev ataması yapmadan önce şikayetin öncelik durumunu belirleyiniz.');
+        return;
+    }
+
     const selectEl = document.getElementById(`assign_${complaintId}`);
     const assignedTo = selectEl.value;
 
@@ -1177,6 +1261,26 @@ async function assignComplaint(complaintId) {
         }
     } catch (error) {
         console.error('Assign complaint error:', error);
+        alert('Bir hata oluştu');
+    }
+}
+
+async function unassignComplaint(complaintId) {
+    if (!confirm('Bu görev atamasını kaldırmak istediğinize emin misiniz?')) {
+        return;
+    }
+
+    try {
+        const result = await unassignTask(complaintId);
+
+        if (result.success) {
+            alert('Görev ataması başarıyla kaldırıldı!');
+            loadAssignTasks();
+        } else {
+            alert(result.message || 'Görev ataması kaldırılırken bir hata oluştu');
+        }
+    } catch (error) {
+        console.error('Unassign complaint error:', error);
         alert('Bir hata oluştu');
     }
 }
@@ -1341,6 +1445,11 @@ async function loadProfile() {
                     </div>
 
                     <div class="form-group">
+                        <label for="profile_address">Adres (KKTC)</label>
+                        <textarea id="profile_address" rows="3" placeholder="KKTC sınırları içerisindeki açık adresiniz">${profile.address || ''}</textarea>
+                    </div>
+
+                    <div class="form-group">
                         <label for="profile_role">Rol</label>
                         <input type="text" id="profile_role" value="${getRoleLabel(profile.role)}" disabled>
                     </div>
@@ -1348,7 +1457,7 @@ async function loadProfile() {
                     <div class="form-group">
                         <label for="profile_password">Yeni Şifre (Değiştirmek istemiyorsanız boş bırakın)</label>
                         <div style="position: relative;">
-                            <input type="password" id="profile_password" minlength="6" style="width: 100%; padding-right: 40px;">
+                            <input type="password" id="profile_password" minlength="6" style="width: 100%; padding-right: 40px;" autocomplete="new-password">
                             <button type="button" onclick="togglePasswordVisibility('profile_password')" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #666; padding: 5px;">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="icon_profile_password">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -1384,6 +1493,7 @@ async function loadProfile() {
 
             const fullName = document.getElementById('profile_full_name').value;
             const phone = document.getElementById('profile_phone').value;
+            const address = document.getElementById('profile_address').value;
             const password = document.getElementById('profile_password').value;
             const passwordConfirm = document.getElementById('profile_password_confirm').value;
 
@@ -1394,7 +1504,8 @@ async function loadProfile() {
 
             const updateData = {
                 full_name: fullName,
-                phone: phone || null
+                phone: phone || null,
+                address: address || null
             };
 
             if (password) {
@@ -1503,25 +1614,11 @@ async function loadUsers() {
 }
 
 
-// Initialize modals (Vanilla JS)
+// Initialize modals
 document.addEventListener('DOMContentLoaded', function () {
-    // Setup close buttons for all modals
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        const closeBtn = modal.querySelector('.close');
-        if (closeBtn) {
-            closeBtn.onclick = function () {
-                modal.style.display = 'none';
-            }
-        }
-
-        // Close on click outside
-        window.addEventListener('click', function (event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        });
-    });
+    // Only use setupModals for general modal logic, avoid duplicates
+    // setupModals() is already called in the upper DOMContentLoaded
+    // We just need to setup the specific form listeners here if they aren't covered
 
     setupNewUserFormListener();
     setupEditUserFormListener();
@@ -1534,8 +1631,10 @@ function showNewUserModal() {
         const form = document.getElementById('newUserForm');
         if (form) form.reset();
 
-        // Show modal
-        modal.style.display = 'block';
+        // Show modal using class
+        modal.classList.add('show');
+        // Clear any inline style that might interfere
+        modal.style.display = '';
     } else {
         alert('Kullanıcı ekleme formu bulunamadı (ID: newUserModal).');
     }
@@ -1560,6 +1659,7 @@ function setupNewUserFormListener() {
                 email: document.getElementById('user_email').value,
                 full_name: document.getElementById('user_full_name').value,
                 phone: document.getElementById('user_phone').value || '',
+                address: document.getElementById('user_address').value || '',
                 role: document.getElementById('user_role').value,
                 password: document.getElementById('user_password').value
             };
@@ -1614,6 +1714,7 @@ function setupEditUserFormListener() {
                 user_id: document.getElementById('edit_user_id').value,
                 full_name: document.getElementById('edit_user_full_name').value,
                 phone: document.getElementById('edit_user_phone').value || '',
+                address: document.getElementById('edit_user_address').value || '',
                 role: document.getElementById('edit_user_role').value,
                 password: document.getElementById('edit_user_password').value
             };
@@ -1682,10 +1783,12 @@ window.openEditUserModal = function (user) {
         document.getElementById('edit_user_email').value = user.email;
         document.getElementById('edit_user_full_name').value = user.full_name;
         document.getElementById('edit_user_phone').value = user.phone || '';
+        document.getElementById('edit_user_address').value = user.address || '';
         document.getElementById('edit_user_role').value = user.role;
         document.getElementById('edit_user_password').value = ''; // Reset password field
 
-        modal.style.display = 'block';
+        modal.classList.add('show');
+        modal.style.display = '';
     }
 };
 

@@ -31,8 +31,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">Telefon (Opsiyonel)</label>
-                    <input type="tel" id="phone" name="phone" autocomplete="tel">
+                    <label for="phone">Telefon</label>
+                    <input type="tel" id="phone" name="phone" required autocomplete="tel">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Adres (KKTC)</label>
+                    <textarea id="address" name="address" required autocomplete="street-address" rows="3" placeholder="Açık adresinizi giriniz..."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -52,14 +57,7 @@
                     <button type="submit" class="btn btn-primary btn-block" id="registerBtn">Kayıt Ol</button>
                 </div>
 
-                <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; text-align: center;">
-                    <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                        data-callback="handleCredentialResponse" data-auto_prompt="false">
-                    </div>
-                    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"
-                        data-text="signup_with" data-shape="rectangular" data-logo_alignment="left" data-width="100%">
-                    </div>
-                </div>
+
 
                 <div class="form-group text-center">
                     <p>Zaten hesabınız var mı? <a href="index.html">Giriş yapın</a></p>
@@ -73,7 +71,7 @@
     <script>
         const API_BASE_URL = window.location.origin + '/api';
     </script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <script src="assets/js/auth.js?v=3"></script>
     <script src="assets/js/register.js?v=3"></script>
 </body>

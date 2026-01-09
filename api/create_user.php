@@ -47,8 +47,8 @@ try {
     $passwordHash = password_hash($input['password'], PASSWORD_DEFAULT);
     
     $stmt = $db->prepare("
-        INSERT INTO users (email, password_hash, full_name, phone, role, email_verified, is_active)
-        VALUES (:email, :password_hash, :full_name, :phone, :role, :email_verified, :is_active)
+        INSERT INTO users (email, password_hash, full_name, phone, address, role, email_verified, is_active)
+        VALUES (:email, :password_hash, :full_name, :phone, :address, :role, :email_verified, :is_active)
         RETURNING id, email, full_name, phone, role, created_at
     ");
     
@@ -57,6 +57,7 @@ try {
         'password_hash' => $passwordHash,
         'full_name' => $input['full_name'],
         'phone' => $input['phone'] ?? null,
+        'address' => $input['address'] ?? null,
         'role' => $input['role'],
         'email_verified' => isset($input['email_verified']) ? $input['email_verified'] : true,
         'is_active' => isset($input['is_active']) ? $input['is_active'] : true

@@ -91,6 +91,18 @@ function assignTask(complaintId, assignedTo) {
         .then(response => response.json());
 }
 
+function unassignTask(complaintId) {
+    return fetch(getAPIUrl() + '/unassign_task.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ complaint_id: complaintId })
+    })
+        .then(response => response.json());
+}
+
 function addComment(complaintId, commentText, isInternal = false) {
     return fetch(getAPIUrl() + '/add_comment.php', {
         method: 'POST',

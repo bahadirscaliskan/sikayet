@@ -35,6 +35,7 @@ try {
             email,
             full_name,
             phone,
+            address,
             role,
             email_verified,
             is_active,

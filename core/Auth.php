@@ -123,7 +123,7 @@ class Auth {
     /**
      * Kullanıcı kaydı
      */
-    public function register($email, $password, $fullName, $phone = null) {
+    public function register($email, $password, $fullName, $phone = null, $address = null) {
         try {
             // E-posta kontrolü
             $checkStmt = $this->db->prepare("SELECT id FROM users WHERE email = :email");
@@ -137,8 +137,8 @@ class Auth {
             $verificationToken = bin2hex(random_bytes(32));
             
             $stmt = $this->db->prepare("
-                INSERT INTO users (email, password_hash, full_name, phone, role, verification_token)
-                VALUES (:email, :password_hash, :full_name, :phone, 'citizen', :verification_token)
+                INSERT INTO users (email, password_hash, full_name, phone, address, role, verification_token)
+                VALUES (:email, :password_hash, :full_name, :phone, :address, 'citizen', :verification_token)
                 RETURNING id, email, full_name, role
             ");
             
@@ -147,6 +147,7 @@ class Auth {
                 'password_hash' => $passwordHash,
                 'full_name' => $fullName,
                 'phone' => $phone,
+                'address' => $address,
                 'verification_token' => $verificationToken
             ]);
             

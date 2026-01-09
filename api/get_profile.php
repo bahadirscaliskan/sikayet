@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 try {
     $stmt = $db->prepare("
-        SELECT id, email, full_name, phone, role, created_at, last_login, email_verified
+        SELECT id, email, full_name, phone, address, role, created_at, last_login, email_verified
         FROM users 
         WHERE id = :id
     ");
