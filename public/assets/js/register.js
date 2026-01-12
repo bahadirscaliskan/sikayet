@@ -8,6 +8,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+
+    // Telefon numarası - sadece rakam girişine izin ver
+    const phoneInput = document.getElementById('phone');
+
+    phoneInput.addEventListener('input', function (e) {
+        // Sadece rakamları tut
+        const digits = e.target.value.replace(/\D/g, '');
+        // Maksimum 10 rakam
+        e.target.value = digits.substring(0, 10);
+    });
+
     registerForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
@@ -33,6 +44,20 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // E-posta formatı kontrolü
+        const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+        if (!emailPattern.test(email)) {
+            showMessage('message', 'Geçerli bir e-posta adresi giriniz (örn: ornek@email.com)', 'error');
+            return;
+        }
+
+        // Telefon formatı kontrolü (Türkiye cep telefonu)
+        // Tam 10 rakam, 5 ile başlamalı
+        if (phone.length !== 10 || phone[0] !== '5') {
+            showMessage('message', 'Geçerli bir Türkiye cep telefonu numarası giriniz (5XX XXX XX XX)', 'error');
+            return;
+        }
+
         registerBtn.disabled = true;
         registerBtn.textContent = 'Kayıt yapılıyor...';
 
@@ -40,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await register({
                 full_name: fullName,
                 email: email,
-                phone: phone,
+                phone: '0' + phone, // 0 ile başlayan format: 05331234567
                 address: address,
                 password: password
             });

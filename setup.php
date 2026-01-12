@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Şikayet ve Görev Yönetim Sistemi - Veritabanı Kurulum Scripti (PHP)
+ * Şikayet ve İstek Yönetim Sistemi - Veritabanı Kurulum Scripti (PHP)
  * 
  * Kullanım: php setup.php
  */

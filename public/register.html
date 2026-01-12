@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Şikayet ve Görev Yönetim Sistemi - Kayıt</title>
+    <title>Şikayet ve İstek Yönetim Sistemi - Kayıt</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/metronic-theme.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,17 +27,22 @@
 
                 <div class="form-group">
                     <label for="email">E-posta</label>
-                    <input type="email" id="email" name="email" required autocomplete="email">
+                    <input type="email" id="email" name="email" required autocomplete="email"
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Geçerli bir e-posta adresi giriniz">
                 </div>
+
 
                 <div class="form-group">
                     <label for="phone">Telefon</label>
-                    <input type="tel" id="phone" name="phone" required autocomplete="tel">
+                    <input type="tel" id="phone" name="phone" required autocomplete="tel" maxlength="10"
+                        title="Geçerli bir Türkiye telefon numarası giriniz">
+
                 </div>
 
                 <div class="form-group">
                     <label for="address">Adres (KKTC)</label>
-                    <textarea id="address" name="address" required autocomplete="street-address" rows="3" placeholder="Açık adresinizi giriniz..."></textarea>
+                    <textarea id="address" name="address" required autocomplete="street-address" rows="3"
+                        placeholder="Açık adresinizi giriniz..."></textarea>
                 </div>
 
                 <div class="form-group">

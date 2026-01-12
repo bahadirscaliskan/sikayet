@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Şikayet Yönetim Sistemi</title>
+    <title>Ana sayfa - Şikayet ve İstek Yönetim Sistemi</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
     <link rel="stylesheet" href="assets/css/metronic-theme.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <h2>Şikayet Yönetim Sistemi</h2>
+                <h2>Şikayet ve İstek Yönetim Sistemi</h2>
             </div>
             <div class="nav-menu">
                 <span id="userName" class="nav-user"></span>
@@ -23,28 +26,28 @@
             </div>
         </div>
     </nav>
-    
+
     <div class="dashboard-container">
         <aside class="sidebar" id="sidebar">
         </aside>
-        
+
         <main class="main-content">
             <div id="dashboardContent">
             </div>
         </main>
     </div>
-    
+
     <div id="complaintModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <div id="modalBody"></div>
         </div>
     </div>
-    
+
     <div id="newComplaintModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Yeni Şikayet Oluştur</h2>
+            <h2>Yeni Şikayet ve İstek Oluştur</h2>
             <form id="newComplaintForm">
                 <div class="form-group">
                     <label for="complaint_title">Başlık</label>
@@ -70,12 +73,12 @@
                     <input type="file" id="complaint_photos" name="photos[]" multiple accept="image/*">
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Şikayet Oluştur</button>
+                    <button type="submit" class="btn btn-primary">Şikayet ve İstek Oluştur</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <!-- Modal: Yeni Kullanıcı (Admin için) -->
     <div id="newUserModal" class="modal" style="display: none;">
         <div class="modal-content">
@@ -96,7 +99,8 @@
                 </div>
                 <div class="form-group">
                     <label for="user_address">Adres (KKTC)</label>
-                    <textarea id="user_address" rows="3" placeholder="KKTC sınırları içerisindeki açık adres"></textarea>
+                    <textarea id="user_address" rows="3"
+                        placeholder="KKTC sınırları içerisindeki açık adres"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="user_role">Rol *</label>
@@ -140,7 +144,8 @@
                 </div>
                 <div class="form-group">
                     <label for="edit_user_address">Adres (KKTC)</label>
-                    <textarea id="edit_user_address" rows="3" placeholder="KKTC sınırları içerisindeki açık adres"></textarea>
+                    <textarea id="edit_user_address" rows="3"
+                        placeholder="KKTC sınırları içerisindeki açık adres"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="edit_user_role">Rol *</label>
@@ -161,7 +166,7 @@
             </form>
         </div>
     </div>
-    
+
     <script>
         // API_BASE_URL global olarak tanımla
         window.API_BASE_URL = window.location.origin + '/api';
@@ -180,5 +185,5 @@
         console.log('dashboard.js loaded');
     </script>
 </body>
-</html>
 
+</html>

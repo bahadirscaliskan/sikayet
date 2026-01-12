@@ -39,14 +39,14 @@ function buildSidebar() {
 
     if (currentUser.role === 'citizen') {
         menuItems = [
-            { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-            { id: 'my_complaints', label: 'Şikayetlerim', icon: '📝' },
+            { id: 'dashboard', label: 'Ana sayfa', icon: '📊' },
+            { id: 'my_complaints', label: 'Şikayet ve İsteklerim', icon: '📝' },
             { id: 'profile', label: 'Profilim', icon: '👤' }
         ];
     } else if (currentUser.role === 'admin') {
         menuItems = [
-            { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-            { id: 'all_complaints', label: 'Tüm Şikayetler', icon: '📋' },
+            { id: 'dashboard', label: 'Ana sayfa', icon: '📊' },
+            { id: 'all_complaints', label: 'Tüm Şikayet ve İstekler', icon: '📋' },
             { id: 'assign_tasks', label: 'Görev Atama', icon: '👥' },
             { id: 'staff_performance', label: 'Personel Performansı', icon: '📈' },
             { id: 'users', label: 'Kullanıcı Yönetimi', icon: '👥' },
@@ -54,7 +54,7 @@ function buildSidebar() {
         ];
     } else if (currentUser.role === 'staff') {
         menuItems = [
-            { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+            { id: 'dashboard', label: 'Ana sayfa', icon: '📊' },
             { id: 'my_tasks', label: 'Görevlerim', icon: '✅' },
             { id: 'completed_tasks', label: 'Tamamlananlar', icon: '✔️' },
             { id: 'profile', label: 'Profilim', icon: '👤' }
@@ -201,11 +201,11 @@ async function loadDashboard() {
                     `).join('')}
                 </tbody>
             </table>
-        ` : '<p>Henüz şikayet bulunmamaktadır.</p>';
+        ` : '<p>Henüz şikayet ve istek bulunmamaktadır.</p>';
 
         content.innerHTML = `
             <div class="page-header">
-                <h1>Dashboard</h1>
+                <h1>Ana sayfa</h1>
             </div>
             
             <div class="stats-grid">
@@ -214,7 +214,7 @@ async function loadDashboard() {
             
             <div class="card">
                 <div class="card-header">
-                    <h2>Son Şikayetler</h2>
+                    <h2>Son Şikayet ve İstekler</h2>
                 </div>
                 <div class="table-container">
                     ${complaintsHTML}
@@ -251,8 +251,8 @@ async function loadComplaintsList(view, filters = {}) {
         console.log('Staff list for complaints:', staffList);
         console.log('Sample complaint assigned_to:', complaints.length > 0 ? complaints[0].assigned_to : 'no complaints');
 
-        const title = view === 'my_complaints' ? 'Şikayetlerim' :
-            view === 'all_complaints' ? 'Tüm Şikayetler' :
+        const title = view === 'my_complaints' ? 'Şikayet ve İsteklerim' :
+            view === 'all_complaints' ? 'Tüm Şikayet ve İstekler' :
                 view === 'my_tasks' ? 'Görevlerim' : 'Tamamlanan Görevler';
 
         const complaintsHTML = complaints.length > 0 ? `
@@ -271,14 +271,14 @@ async function loadComplaintsList(view, filters = {}) {
                     ${complaints.map(complaint => {
             const isAssigned = !!complaint.assigned_to;
             // Removed row coloring for this view as requested
-            const rowClass = ''; 
+            const rowClass = '';
 
             // Find staff name if admin
             let assignedStaffName = '-';
             if (currentUser.role === 'admin' && complaint.assigned_to) {
-                assignedStaffName = complaint.assigned_to_name || 
-                                  (staffList.find(s => s.id == complaint.assigned_to)?.full_name) || 
-                                  'Personel';
+                assignedStaffName = complaint.assigned_to_name ||
+                    (staffList.find(s => s.id == complaint.assigned_to)?.full_name) ||
+                    'Personel';
             }
 
             return `
@@ -341,7 +341,7 @@ async function loadComplaintsList(view, filters = {}) {
                     `}).join('')}
                 </tbody>
             </table>
-            ` : '<p>Henüz şikayet bulunmamaktadır.</p>';
+            ` : '<p>Henüz şikayet ve istek bulunmamaktadır.</p>';
 
         content.innerHTML = `
             <div class="page-header">
@@ -351,7 +351,7 @@ async function loadComplaintsList(view, filters = {}) {
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        Yeni Şikayet Ekle
+                        Yeni Şikayet ve İstek Ekle
                     </button>
                 ` : ''}
             </div>
@@ -595,11 +595,11 @@ function setupModals() {
             const result = await createComplaint(formData, photos);
 
             if (result.success) {
-                alert('Şikayet başarıyla oluşturuldu!');
+                alert('Şikayet ve istek başarıyla oluşturuldu!');
                 document.getElementById('newComplaintModal').classList.remove('show');
                 loadView(currentView);
             } else {
-                alert(result.message || 'Şikayet oluşturulurken bir hata oluştu');
+                alert(result.message || 'Şikayet ve istek oluşturulurken bir hata oluştu');
             }
         } catch (error) {
             console.error('Create complaint error:', error);
@@ -695,7 +695,7 @@ async function updateStatus(complaintId, status) {
             <div id="priorityModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
                 <div style="background:white;padding:20px;border-radius:8px;width:300px;">
                     <h3>Öncelik Belirle</h3>
-                    <p>Lütfen bu şikayet için bir öncelik seçin:</p>
+                    <p>Lütfen bu şikayet ve istek için bir öncelik seçin:</p>
                     <select id="selectedPriority" class="form-control" style="width:100%;margin-bottom:15px;">
                         <option value="low">Düşük</option>
                         <option value="medium">Orta</option>
@@ -1171,10 +1171,10 @@ async function loadAssignTasks() {
 
             // Find assigned staff name
             // Use backend provided name first, fallback to staff lookup
-            const assignedName = complaint.assigned_to_name || (complaint.assigned_to 
-                ? (staff.find(s => s.id == complaint.assigned_to)?.full_name || '-') 
+            const assignedName = complaint.assigned_to_name || (complaint.assigned_to
+                ? (staff.find(s => s.id == complaint.assigned_to)?.full_name || '-')
                 : '-');
-            
+
             // Apply inline style to ensure green background for assigned tasks
             const rowStyle = isAssigned ? 'background-color: #d1fae5;' : '';
 
@@ -1238,7 +1238,7 @@ async function loadAssignTasks() {
 async function assignComplaint(complaintId, priority) {
     // Check if priority is set
     if (!priority || priority === 'null' || priority === 'undefined') {
-        alert('Lütfen görev ataması yapmadan önce şikayetin öncelik durumunu belirleyiniz.');
+        alert('Lütfen görev ataması yapmadan önce şikayet ve isteğin öncelik durumunu belirleyiniz.');
         return;
     }
 
@@ -1806,7 +1806,7 @@ function getRoleLabel(role) {
 
 
 function deleteComplaint(id) {
-    if (confirm('Bu şikayeti silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!')) {
+    if (confirm('Bu şikayet ve isteği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!')) {
         fetch('/api/delete_complaint.php', {
             method: 'POST',
             headers: {
