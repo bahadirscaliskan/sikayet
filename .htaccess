@@ -1,10 +1,25 @@
 RewriteEngine On
 RewriteBase /
 
+# Redirect .html URLs to clean URLs (301 permanent redirect)
+RewriteCond %{THE_REQUEST} ^GET\ /public/([^.\ ]+)\.html
+RewriteRule ^ /%1? [R=301,L]
+
+RewriteCond %{THE_REQUEST} ^GET\ /([^.\ ]+)\.html
+RewriteRule ^ /%1? [R=301,L]
+
+# Check if .html file exists and serve it for clean URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI}.html -f
+RewriteRule ^(.*)$ public/$1.html [L]
+
+# API routing
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^api/(.*)$ api/$1 [L,QSA]
 
+# Public folder routing
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

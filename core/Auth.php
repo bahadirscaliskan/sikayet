@@ -153,8 +153,6 @@ class Auth {
             
             $user = $stmt->fetch();
             
-            $user = $stmt->fetch();
-            
             // E-posta doğrulama maili gönder
             require_once __DIR__ . '/MailService.php';
             $mailService = new MailService();
@@ -240,4 +238,3 @@ class Auth {
         return $user;
     }
 }
-

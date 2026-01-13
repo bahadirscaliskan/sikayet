@@ -179,3 +179,19 @@ HINT:  Perhaps you meant to reference the column "comments.created_at".
 DETAIL:  Failing row contains (6, 5, complaints/complaint_695f7b87d8763_1767865223.svg, during, 3, 2026-01-08 12:40:23.887615).
 [10-Jan-2026 00:36:33 Europe/Istanbul] PHP Warning:  Undefined array key "REQUEST_URI" in /Users/bahadir/Documents/cursor/config/config.php on line 26
 [10-Jan-2026 00:36:33 Europe/Istanbul] PHP Deprecated:  strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated in /Users/bahadir/Documents/cursor/config/config.php on line 26
+[13-Jan-2026 21:55:21 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
+DETAIL:  Key (email)=(silme@gmail.com) already exists.
+[13-Jan-2026 21:55:21 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
+DETAIL:  Key (email)=(silme@gmail.com) already exists.
+[13-Jan-2026 21:55:24 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
+DETAIL:  Key (email)=(silme@gmail.com) already exists.
+[13-Jan-2026 21:55:24 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
+DETAIL:  Key (email)=(silme@gmail.com) already exists.
+[13-Jan-2026 21:56:13 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
+DETAIL:  Key (email)=(silme@gmail.com) already exists.
+[13-Jan-2026 21:56:13 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
+DETAIL:  Key (email)=(silme@gmail.com) already exists.
+[13-Jan-2026 21:59:06 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
+DETAIL:  Key (email)=(silme@gmail.com) already exists.
+[13-Jan-2026 21:59:06 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
+DETAIL:  Key (email)=(silme@gmail.com) already exists.

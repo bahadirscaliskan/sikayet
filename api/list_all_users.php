@@ -14,18 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 try {
-    $whereClause = "";
+    // Sadece aktif kullanıcıları listele (soft delete için)
+    $whereClause = "WHERE is_active = true";
     $params = [];
     
     // Rol filtresi
     if (isset($_GET['role']) && !empty($_GET['role'])) {
-        $whereClause = "WHERE role = :role";
+        $whereClause .= " AND role = :role";
         $params['role'] = $_GET['role'];
     }
     
     // Arama
     if (isset($_GET['search']) && !empty($_GET['search'])) {
-        $whereClause .= ($whereClause ? " AND " : "WHERE ") . "(email ILIKE :search OR full_name ILIKE :search)";
+        $whereClause .= " AND (email ILIKE :search OR full_name ILIKE :search)";
         $params['search'] = '%' . $_GET['search'] . '%';
     }
     
@@ -55,4 +56,3 @@ try {
     error_log("List All Users Error: " . $e->getMessage());
     Response::error('Kullanıcılar getirilirken bir hata oluştu', 500);
 }
-

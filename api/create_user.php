@@ -36,10 +36,25 @@ if (!in_array($input['role'], $allowedRoles)) {
 }
 
 try {
-    // E-posta kontrolü
-    $checkStmt = $db->prepare("SELECT id FROM users WHERE email = :email");
+    // E-posta kontrolü ve Idempotency (Çift İstek) Koruması
+    $checkStmt = $db->prepare("SELECT id, created_at FROM users WHERE email = :email");
     $checkStmt->execute(['email' => $input['email']]);
-    if ($checkStmt->fetch()) {
+    $existingUser = $checkStmt->fetch();
+
+    if ($existingUser) {
+        // Eğer kullanıcı son 10 saniye içinde oluşturulmuşsa, bu bir çift istek (double duplicate) hatasıdır.
+        // Hata vermek yerine başarı dönmeliyiz ki kullanıcı "zaten var" hatası görüp şaşırmasın.
+        $createdAt = new DateTime($existingUser['created_at']);
+        $now = new DateTime();
+        $diff = $now->getTimestamp() - $createdAt->getTimestamp();
+
+        if ($diff < 10) {
+            // Idempotent Response: Başarılı gibi davran
+            // Ancak returning datasını tekrar çekmek gerekebilir, basitçe mevcut veriyi dönelim
+            Response::success($existingUser, 'Kullanıcı başarıyla oluşturuldu (Idempotent)', 200);
+            exit;
+        }
+
         Response::error('Bu e-posta adresi zaten kullanılıyor', 400);
     }
     
@@ -81,4 +96,3 @@ try {
     error_log("Create User Error: " . $e->getMessage());
     Response::error('Kullanıcı oluşturulurken bir hata oluştu', 500);
 }
-

@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     document.getElementById('userName').textContent = currentUser.name || currentUser.full_name || 'Kullanıcı';
 
-    document.getElementById('logoutBtn').addEventListener('click', function () {
-        if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
+    document.getElementById('logoutBtn').addEventListener('click', async function () {
+        if (await confirm('Oturumunuzu sonlandırmak istiyor musunuz?')) {
             logout();
         }
     });
@@ -684,7 +684,7 @@ function setupModals() {
 }
 
 async function updateStatus(complaintId, status) {
-    if (!confirm('Durumu güncellemek istediğinize emin misiniz?')) {
+    if (!await confirm('Durumu güncellemek istediğinize emin misiniz?')) {
         return;
     }
 
@@ -811,7 +811,7 @@ async function updateCommentData(commentId, complaintId) {
 }
 
 async function deleteCommentFromComplaint(commentId, complaintId) {
-    if (!confirm('Bu yorumu silmek istediğinizden emin misiniz?')) {
+    if (!await confirm('Bu yorumu silmek istediğinizden emin misiniz?')) {
         return;
     }
 
@@ -974,8 +974,8 @@ function showEditComplaintModal(complaintId) {
     });
 }
 
-function deletePhoto(photoId) {
-    if (!confirm('Bu fotoğrafı silmek istediğinizden emin misiniz?')) return;
+async function deletePhoto(photoId) {
+    if (!await confirm('Bu fotoğrafı silmek istediğinizden emin misiniz?')) return;
 
     fetch('/api/delete_photo.php', {
         method: 'POST',
@@ -1266,7 +1266,7 @@ async function assignComplaint(complaintId, priority) {
 }
 
 async function unassignComplaint(complaintId) {
-    if (!confirm('Bu görev atamasını kaldırmak istediğinize emin misiniz?')) {
+    if (!await confirm('Bu görev atamasını kaldırmak istediğinize emin misiniz?')) {
         return;
     }
 
@@ -1647,8 +1647,14 @@ function setupNewUserFormListener() {
         const newForm = newUserForm.cloneNode(true);
         newUserForm.parentNode.replaceChild(newForm, newUserForm);
 
+        // Flag to prevent double submission
+        let isSubmitting = false;
+
         newForm.addEventListener('submit', async function (e) {
             e.preventDefault();
+
+            if (isSubmitting) return;
+            isSubmitting = true;
 
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
@@ -1678,19 +1684,23 @@ function setupNewUserFormListener() {
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('Kullanıcı başarıyla oluşturuldu');
+                    await alert('Kullanıcı başarıyla oluşturuldu');
+                    document.getElementById('newUserModal').classList.remove('show');
                     document.getElementById('newUserModal').style.display = 'none';
                     loadUsers();
                     newForm.reset();
                 } else {
-                    alert(result.message || 'Kullanıcı oluşturulurken bir hata oluştu');
+                    await alert(result.message || 'Kullanıcı oluşturulurken bir hata oluştu');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Bir hata oluştu: ' + error.message);
+                await alert('Bir hata oluştu: ' + error.message);
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
+                isSubmitting = false;
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
             }
         });
     }
@@ -1750,8 +1760,8 @@ function setupEditUserFormListener() {
 }
 
 // Global functions for inline onclick handlers
-window.deleteUser = function (id) {
-    if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
+window.deleteUser = async function (id) {
+    if (await confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
         fetch('/api/delete_user.php', {
             method: 'POST',
             headers: {
@@ -1805,8 +1815,8 @@ function getRoleLabel(role) {
 }
 
 
-function deleteComplaint(id) {
-    if (confirm('Bu şikayet ve isteği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!')) {
+async function deleteComplaint(id) {
+    if (await confirm('Bu şikayet ve isteği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!')) {
         fetch('/api/delete_complaint.php', {
             method: 'POST',
             headers: {

@@ -36,23 +36,19 @@ if ($userIdToDelete == $user['id']) {
 }
 
 try {
-    // Kullanıcıyı sil (Cascade ile ilişkili veriler de silinebilir veya soft delete yapılabilir)
-    // Şimdilik sert silme yapıyoruz, ilişkili veriler veritabanı constraint'lerine bağlı
+    // Soft delete: Kullanıcıyı silmek yerine is_active'i false yap
+    // Bu sayede ilişkili veriler korunur ve gerekirse geri yüklenebilir
     
-    $stmt = $db->prepare("DELETE FROM users WHERE id = :id");
+    $stmt = $db->prepare("UPDATE users SET is_active = false WHERE id = :id AND is_active = true");
     $stmt->execute(['id' => $userIdToDelete]);
     
     if ($stmt->rowCount() > 0) {
-        Response::success(null, 'Kullanıcı başarıyla silindi');
+        Response::success(null, 'Kullanıcı başarıyla pasif hale getirildi');
     } else {
-        Response::error('Kullanıcı bulunamadı', 404);
+        Response::error('Kullanıcı bulunamadı veya zaten pasif durumda', 404);
     }
     
 } catch (PDOException $e) {
-    // Constraint hatası kontrolü (örneğin şikayetleri varsa silinemeyebilir)
-    if ($e->getCode() == '23000' || $e->getCode() == '23503') { 
-         Response::error('Bu kullanıcıya ait kayıtlar olduğu için silinemiyor.', 400);
-    }
     error_log("Delete User Error: " . $e->getMessage());
-    Response::error('Kullanıcı silinirken bir hata oluştu', 500);
+    Response::error('Kullanıcı işlemi sırasında bir hata oluştu', 500);
 }
