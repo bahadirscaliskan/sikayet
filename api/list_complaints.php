@@ -17,11 +17,15 @@ try {
     $params = [];
     
     if ($user['role'] === 'citizen') {
-        $whereClause = "WHERE c.user_id = :user_id";
+        $whereClause = "WHERE c.user_id = :user_id AND c.status != 'closed'";
         $params['user_id'] = $user['id'];
     } elseif ($user['role'] === 'staff') {
-        $whereClause = "WHERE c.assigned_to = :user_id";
+        $whereClause = "WHERE c.assigned_to = :user_id AND c.status != 'closed'";
         $params['user_id'] = $user['id'];
+    } else {
+        // Admin için de closed (silinmiş gibi davranan) kayıtlar varsayılan olarak gelmesin
+        // Ancak admin özellikle silinenleri görmek isterse status filtresi kullanabilir, o yüzden burası sadece varsayılan davranış
+        $whereClause = "WHERE c.status != 'closed'";
     }
     
     if (isset($_GET['status']) && !empty($_GET['status'])) {

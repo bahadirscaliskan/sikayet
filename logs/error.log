@@ -195,3 +195,9 @@ DETAIL:  Key (email)=(silme@gmail.com) already exists.
 DETAIL:  Key (email)=(silme@gmail.com) already exists.
 [13-Jan-2026 21:59:06 Europe/Istanbul] Create User Error: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "users_email_key"
 DETAIL:  Key (email)=(silme@gmail.com) already exists.
+[13-Jan-2026 22:48:23 Europe/Istanbul] Delete Complaint Error: SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "complaints" violates check constraint "complaints_status_check"
+DETAIL:  Failing row contains (8, 10, istek-2, istek-2, 39.93654237, 33.78820848, KKTC, deleted, null, null, null, 2026-01-10 13:42:10.676957, 2026-01-13 22:48:23.05346, null).
+[13-Jan-2026 22:48:41 Europe/Istanbul] Delete Complaint Error: SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "complaints" violates check constraint "complaints_status_check"
+DETAIL:  Failing row contains (8, 10, istek-2, istek-2, 39.93654237, 33.78820848, KKTC, deleted, null, null, null, 2026-01-10 13:42:10.676957, 2026-01-13 22:48:41.907436, null).
+[13-Jan-2026 22:51:09 Europe/Istanbul] Delete Complaint Error: SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "complaints" violates check constraint "complaints_status_check"
+DETAIL:  Failing row contains (8, 10, istek-2, istek-2, 39.93654237, 33.78820848, KKTC, deleted, null, null, null, 2026-01-10 13:42:10.676957, 2026-01-13 22:51:09.416272, null).

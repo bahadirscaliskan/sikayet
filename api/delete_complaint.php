@@ -42,65 +42,24 @@ try {
         Response::error('Bu işlem için yetkiniz yok', 403);
     }
 
-    // Sadece 'pending' durumundakiler silinebilir
-    if ($complaint['status'] !== 'pending') {
-        Response::error('Sadece beklemedeki şikayetler silinebilir', 400);
-    }
-
-    // Silme işlemi
-    $deleteStmt = $db->prepare("DELETE FROM complaints WHERE id = :id");
-    $deleteStmt->execute(['id' => $complaintId]);
+    // Soft Delete işlemi (Status update -> closed)
+    // DB constraint nedeniyle 'deleted' kullanamıyoruz, 'closed' kullanıp listede gizleyeceğiz.
+    $updateStmt = $db->prepare("UPDATE complaints SET status = 'closed' WHERE id = :id");
+    $updateStmt->execute(['id' => $complaintId]);
 
     // Loglama
     $logStmt = $db->prepare("
         INSERT INTO activity_logs (complaint_id, user_id, action, description)
-        VALUES (:complaint_id, :user_id, 'deleted', 'Şikayet silindi')
+        VALUES (:complaint_id, :user_id, 'deleted', 'Şikayet silindi (Soft Delete - Closed)')
     ");
-    // complaint_id artık yok ama loglarda tutmak isteyebiliriz, ancak foreign key varsa loglar da silinebilir veya null set edilebilir.
-    // Veritabanı yapısına bağlı. Genelde silinen kaydın logu tutulurken complaint_id null yapılabilir veya id tutulur ama constraint yoksa. 
-    // Basitlik adına, eğer hard delete yapıyorsak foreign key hatası alabiliriz activity_logs tarafında ON DELETE CASCADE yoksa.
-    // Ancak kullanıcı "şikayet silme" dedi, bu genelde soft delete veya hard delete olabilir.
-    // create_complaint.php'de transaction kullanılmamış, burada da basit tutalım.
-    // Eğer foreign key hatası alırsak önce ilişkili verileri silmeliyiz.
-    // Tipik olarak: photos, comments, logs.
-    
-    // Basit olması için önce loglamayı deneyelim, hata verirse user'a bildiririz veya cascade sileriz.
-    // Şimdilik loglamayı atlıyorum çünkü kayıt silindi.
+    $logStmt->execute([
+        'complaint_id' => $complaintId,
+        'user_id' => $user['id']
+    ]);
 
     Response::success(null, 'Şikayet başarıyla silindi');
 
 } catch (PDOException $e) {
-    // Foreign key constraint hatası yakalanabilir (23503)
-    if ($e->getCode() == '23503') {
-        // İlişkili kayıtlar var, önce onları temizlememiz gerekebilir veya soft delete yapmalıydık.
-        // Hızlı çözüm: İlişkili tabloları manuel temizle.
-        try {
-            $db->beginTransaction();
-            
-            // Fotoğrafları sil
-            $db->prepare("DELETE FROM complaint_photos WHERE complaint_id = :id")->execute(['id' => $complaintId]);
-            
-            // Yorumları sil
-            $db->prepare("DELETE FROM comments WHERE complaint_id = :id")->execute(['id' => $complaintId]);
-            
-            // Logları sil
-            $db->prepare("DELETE FROM activity_logs WHERE complaint_id = :id")->execute(['id' => $complaintId]);
-            
-            // Bildirimleri sil
-            $db->prepare("DELETE FROM notifications WHERE complaint_id = :id")->execute(['id' => $complaintId]);
-            
-            // Son olarak şikayeti sil
-            $db->prepare("DELETE FROM complaints WHERE id = :id")->execute(['id' => $complaintId]);
-            
-            $db->commit();
-            Response::success(null, 'Şikayet başarıyla silindi');
-        } catch (Exception $ex) {
-            $db->rollBack();
-            error_log("Delete Complaint Error (Cascade): " . $ex->getMessage());
-            Response::error('Şikayet silinirken bir hata oluştu', 500);
-        }
-    } else {
-        error_log("Delete Complaint Error: " . $e->getMessage());
-        Response::error('Şikayet silinirken bir hata oluştu', 500);
-    }
+    error_log("Delete Complaint Error: " . $e->getMessage());
+    Response::error('Şikayet silinirken bir hata oluştu', 500);
 }

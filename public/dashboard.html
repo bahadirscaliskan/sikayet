@@ -48,7 +48,9 @@
     <div id="newComplaintModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Yeni Şikayet ve İstek Oluştur</h2>
+            <h2
+                style="text-align: center; color: #2c3e50; font-weight: 600; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                Yeni Şikayet ve İstek Oluştur</h2>
             <form id="newComplaintForm">
                 <div class="form-group">
                     <label for="complaint_title">Başlık</label>
@@ -64,7 +66,8 @@
                 </div>
                 <div class="form-group">
                     <label>Konum</label>
-                    <button type="button" id="getLocationBtn" class="btn btn-secondary">Konumumu Al</button>
+                    <button type="button" id="getLocationBtn" class="btn btn-secondary" style="width: 100%;">Konumumu
+                        Al</button>
                     <input type="hidden" id="complaint_latitude" name="latitude">
                     <input type="hidden" id="complaint_longitude" name="longitude">
                     <small id="locationStatus"></small>
@@ -73,8 +76,9 @@
                     <label for="complaint_photos">Fotoğraflar</label>
                     <input type="file" id="complaint_photos" name="photos[]" multiple accept="image/*">
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Şikayet ve İstek Oluştur</button>
+                <div class="form-group" style="text-align: center; margin-top: 25px;">
+                    <button type="submit" class="btn btn-primary"
+                        style="min-width: 200px; padding: 12px 30px; font-size: 16px;">Şikayet ve İstek Oluştur</button>
                 </div>
             </form>
         </div>
@@ -84,7 +88,9 @@
     <div id="newUserModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Yeni Kullanıcı Ekle</h2>
+            <h2
+                style="text-align: center; color: #2c3e50; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                Yeni Kullanıcı Ekle</h2>
             <form id="newUserForm">
                 <div class="form-group">
                     <label for="user_email">E-posta *</label>
@@ -116,8 +122,8 @@
                     <input type="password" id="user_password" required minlength="6" autocomplete="new-password">
                     <small>En az 6 karakter</small>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Kullanıcı Ekle</button>
+                <div class="form-group" style="text-align: center; margin-top: 25px;">
+                    <button type="submit" class="btn btn-primary" style="min-width: 150px;">Kullanıcı Ekle</button>
                 </div>
             </form>
         </div>
@@ -127,7 +133,9 @@
     <div id="editUserModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Kullanıcı Düzenle</h2>
+            <h2
+                style="text-align: center; color: #2c3e50; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                Kullanıcı Düzenle</h2>
             <form id="editUserForm">
                 <input type="hidden" id="edit_user_id">
                 <div class="form-group">
@@ -161,8 +169,12 @@
                     <input type="password" id="edit_user_password" minlength="6">
                     <small>Değiştirmek istemiyorsanız boş bırakın</small>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                <div class="form-group" style="text-align: center; margin-top: 25px;">
+                    <button type="submit" class="btn btn-primary"
+                        style="min-width: 150px; margin-right: 10px;">Güncelle</button>
+                    <button type="button" class="btn btn-danger"
+                        onclick="document.getElementById('editUserModal').classList.remove('show'); document.getElementById('editUserModal').style.display='none';"
+                        style="min-width: 150px;">Vazgeç</button>
                 </div>
             </form>
         </div>

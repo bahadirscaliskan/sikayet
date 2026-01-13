@@ -453,7 +453,7 @@ async function showComplaintDetail(id) {
 
         modalBody.innerHTML = `
             <div class="complaint-detail">
-                <h2>${complaint.title}</h2>
+                <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;">${complaint.title}</h2>
                 
                 <div class="detail-row">
                     <div class="detail-label">Durum:</div>
@@ -530,7 +530,7 @@ async function showComplaintDetail(id) {
                 ` : ''}
                 
                 ${canUpdateStatus(complaint) ? `
-                    <div class="status-action-buttons">
+                    <div class="status-action-buttons" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
                         ${currentUser.role !== 'staff' ? `
                         <button class="btn btn-success" onclick="updateStatus(${complaint.id}, 'in_progress')">
                             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -864,7 +864,7 @@ function showEditComplaintModal(complaintId) {
 
         modalBody.innerHTML = `
             <div class="complaint-edit-form">
-                <h2 style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Şikayeti Düzenle</h2>
+                <h2 style="text-align: center; color: #2c3e50; font-weight: 600; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee;">Şikayeti Düzenle</h2>
                 <form id="editComplaintForm">
                     <div class="form-group">
                         <label for="edit_title" style="font-weight: 600;">Başlık</label>
@@ -915,7 +915,7 @@ function showEditComplaintModal(complaintId) {
                         <small style="color: #6c757d; display: block; margin-top: 5px;">Mevcut fotoğraflar korunacaktır.</small>
                     </div>
 
-                    <div class="form-actions" style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px; pt-3; border-top: 1px solid #eee;">
+                    <div class="form-actions" style="display: flex; gap: 10px; justify-content: center; margin-top: 25px; pt-3; border-top: 1px solid #eee;">
                         <button type="button" class="btn btn-secondary close-modal-btn" onclick="showComplaintDetail(${complaintId})" style="display: flex; align-items: center; gap: 5px; padding: 8px 16px;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1823,7 +1823,7 @@ async function deleteComplaint(id) {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            body: JSON.stringify({ complaint_id: id })
+            body: JSON.stringify({ id: id })
         })
             .then(response => response.json())
             .then(result => {
