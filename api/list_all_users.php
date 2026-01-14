@@ -26,7 +26,7 @@ try {
     
     // Arama
     if (isset($_GET['search']) && !empty($_GET['search'])) {
-        $whereClause .= " AND (email ILIKE :search OR full_name ILIKE :search)";
+        $whereClause .= " AND (email LIKE :search OR full_name LIKE :search)";
         $params['search'] = '%' . $_GET['search'] . '%';
     }
     

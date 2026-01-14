@@ -53,20 +53,19 @@ try {
         
         $insertStmt = $db->prepare("
             INSERT INTO users (email, password_hash, full_name, role, email_verified, is_active)
-            VALUES (:email, :password_hash, :full_name, 'citizen', :email_verified, true)
-            RETURNING id, role
+            VALUES (:email, :password_hash, :full_name, 'citizen', :email_verified, 1)
         ");
         
         $insertStmt->execute([
             'email' => $email,
             'password_hash' => $passwordHash,
             'full_name' => $fullName,
-            'email_verified' => $emailVerified ? 'true' : 'false' // Boolean olarak saklıyorsak
+            'email_verified' => $emailVerified ? 1 : 0
         ]);
         
-        $user = $insertStmt->fetch();
-        $userId = $user['id'];
-        $role = $user['role'];
+        $userId = $db->lastInsertId();
+        $role = 'citizen';
+        $user = ['id' => $userId, 'role' => $role];
         $isNew = true;
     } else {
         $userId = $user['id'];

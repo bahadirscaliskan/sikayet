@@ -30,7 +30,7 @@ try {
         SELECT * FROM password_resets 
         WHERE email = :email 
         AND token = :token 
-        AND created_at > NOW() - INTERVAL '1 hour'
+        AND created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)
     ");
     
     $stmt->execute([

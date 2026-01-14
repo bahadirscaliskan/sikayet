@@ -24,7 +24,7 @@ try {
     // Kullanıcıyı doğrulanmış olarak işaretle
     $updateStmt = $db->prepare("
         UPDATE users 
-        SET email_verified = true, verification_token = NULL 
+        SET email_verified = 1, verification_token = NULL 
         WHERE id = :id
     ");
     $updateStmt->execute(['id' => $user['id']]);

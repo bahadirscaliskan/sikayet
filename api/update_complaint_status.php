@@ -72,12 +72,14 @@ try {
         $updateQuery .= ", completed_at = CURRENT_TIMESTAMP";
     }
     
-    $updateQuery .= " WHERE id = :id RETURNING *";
+    $updateQuery .= " WHERE id = :id";
     
     $updateStmt = $db->prepare($updateQuery);
     $updateStmt->execute($updateData);
     
-    $updatedComplaint = $updateStmt->fetch();
+    $stmt = $db->prepare("SELECT * FROM complaints WHERE id = :id");
+    $stmt->execute(['id' => $complaintId]);
+    $updatedComplaint = $stmt->fetch();
     
     $logStmt = $db->prepare("
         INSERT INTO activity_logs (complaint_id, user_id, action, old_value, new_value, description)

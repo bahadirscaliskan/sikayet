@@ -59,12 +59,17 @@ try {
     }
     
     // Yorumu sil
-    $deleteStmt = $db->prepare("DELETE FROM comments WHERE id = :id RETURNING id");
+    $deleteStmt = $db->prepare("DELETE FROM comments WHERE id = :id");
     $deleteStmt->execute(['id' => $commentId]);
-    $deletedComment = $deleteStmt->fetch();
+    
+    if ($deleteStmt->rowCount() > 0) {
+        $deletedComment = ['id' => $commentId];
+    } else {
+        $deletedComment = false;
+    }
     
     if (!$deletedComment) {
-        Response::error('Yorum silinemedi', 500);
+        Response::error('Yorum silinemedi veya zaten silinmiş', 500);
     }
     
     // Activity log ekle

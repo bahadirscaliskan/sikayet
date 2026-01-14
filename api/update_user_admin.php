@@ -50,12 +50,14 @@ try {
         $updateData['password_hash'] = password_hash($input['password'], PASSWORD_DEFAULT);
     }
     
-    $updateQuery .= ", updated_at = CURRENT_TIMESTAMP WHERE id = :id RETURNING id, email, full_name, phone, role, is_active, created_at";
+    $updateQuery .= ", updated_at = CURRENT_TIMESTAMP WHERE id = :id";
     
     $stmt = $db->prepare($updateQuery);
     $stmt->execute($updateData);
     
-    $updatedUser = $stmt->fetch();
+    $fetchStmt = $db->prepare("SELECT id, email, full_name, phone, role, is_active, created_at FROM users WHERE id = :id");
+    $fetchStmt->execute(['id' => $input['user_id']]);
+    $updatedUser = $fetchStmt->fetch();
 
     if ($updatedUser) {
          Response::success($updatedUser, 'Kullanıcı başarıyla güncellendi');

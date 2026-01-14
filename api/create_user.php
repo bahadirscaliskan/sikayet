@@ -64,7 +64,6 @@ try {
     $stmt = $db->prepare("
         INSERT INTO users (email, password_hash, full_name, phone, address, role, email_verified, is_active)
         VALUES (:email, :password_hash, :full_name, :phone, :address, :role, :email_verified, :is_active)
-        RETURNING id, email, full_name, phone, role, created_at
     ");
     
     $stmt->execute([
@@ -78,6 +77,9 @@ try {
         'is_active' => isset($input['is_active']) ? $input['is_active'] : true
     ]);
     
+    $id = $db->lastInsertId();
+    $stmt = $db->prepare("SELECT id, email, full_name, phone, role, created_at FROM users WHERE id = :id");
+    $stmt->execute(['id' => $id]);
     $newUser = $stmt->fetch();
     
     // Aktivite logu

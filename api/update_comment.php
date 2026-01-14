@@ -55,7 +55,6 @@ try {
         UPDATE comments 
         SET comment_text = :comment_text
         WHERE id = :id
-        RETURNING id, complaint_id, user_id, comment_text, is_internal, created_at
     ");
     
     $updateStmt->execute([
@@ -63,7 +62,9 @@ try {
         'comment_text' => $commentText
     ]);
     
-    $updatedComment = $updateStmt->fetch();
+    $stmt = $db->prepare("SELECT id, complaint_id, user_id, comment_text, is_internal, created_at FROM comments WHERE id = :id");
+    $stmt->execute(['id' => $commentId]);
+    $updatedComment = $stmt->fetch();
     
     if (!$updatedComment) {
         Response::error('Yorum güncellenemedi', 500);

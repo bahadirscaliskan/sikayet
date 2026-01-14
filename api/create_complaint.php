@@ -39,7 +39,6 @@ try {
     $stmt = $db->prepare("
         INSERT INTO complaints (user_id, title, description, latitude, longitude, address, priority)
         VALUES (:user_id, :title, :description, :latitude, :longitude, :address, :priority)
-        RETURNING id, title, description, latitude, longitude, address, status, created_at
     ");
     
     $stmt->execute([
@@ -52,6 +51,9 @@ try {
         'priority' => $input['priority'] ?? null
     ]);
     
+    $id = $db->lastInsertId();
+    $stmt = $db->prepare("SELECT id, title, description, latitude, longitude, address, status, created_at FROM complaints WHERE id = :id");
+    $stmt->execute(['id' => $id]);
     $complaint = $stmt->fetch();
     
     $logStmt = $db->prepare("
@@ -87,14 +89,13 @@ try {
                     $photoStmt = $db->prepare("
                         INSERT INTO complaint_photos (complaint_id, photo_path, photo_type, uploaded_by)
                         VALUES (:complaint_id, :photo_path, 'before', :uploaded_by)
-                        RETURNING id
                     ");
                     $photoStmt->execute([
                         'complaint_id' => $complaint['id'],
                         'photo_path' => 'complaints/' . $fileName,
                         'uploaded_by' => $user['id']
                     ]);
-                    $photoIds[] = $photoStmt->fetch()['id'];
+                    $photoIds[] = $db->lastInsertId();
                 }
             }
         }

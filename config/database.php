@@ -7,19 +7,22 @@ class Database {
     private static $instance = null;
     private $connection;
     
+    // MySQL ayarları
     private $host = 'localhost';
     private $dbname = 'complaint_management_system';
-    private $username = 'bahadir';
-    private $password = '1q2w3e';
-    private $port = '5432';
+    private $username = 'root'; // Varsayılan: root
+    private $password = ''; // Varsayılan: boş
+    private $port = '3306';
+    private $charset = 'utf8mb4';
     
     private function __construct() {
         try {
-            $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->dbname}";
+            $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->dbname};charset={$this->charset}";
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES {$this->charset} COLLATE {$this->charset}_unicode_ci"
             ];
             
             $this->connection = new PDO($dsn, $this->username, $this->password, $options);
@@ -27,7 +30,7 @@ class Database {
             error_log("Database Connection Error: " . $e->getMessage());
             die(json_encode([
                 'success' => false,
-                'message' => 'Veritabanı bağlantı hatası'
+                'message' => 'Veritabanı bağlantı hatası: ' . $e->getMessage()
             ]));
         }
     }
@@ -49,4 +52,3 @@ class Database {
         throw new Exception("Cannot unserialize singleton");
     }
 }
-

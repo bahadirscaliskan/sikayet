@@ -64,7 +64,6 @@ try {
             latitude = :latitude,
             longitude = :longitude
         WHERE id = :id
-        RETURNING *
     ");
     
     $updateStmt->execute([
@@ -76,7 +75,9 @@ try {
         'longitude' => $longitude
     ]);
     
-    $updatedComplaint = $updateStmt->fetch();
+    $stmt = $db->prepare("SELECT * FROM complaints WHERE id = :id");
+    $stmt->execute(['id' => $complaintId]);
+    $updatedComplaint = $stmt->fetch();
 
     $uploadErrors = [];
     $uploadedCount = 0;

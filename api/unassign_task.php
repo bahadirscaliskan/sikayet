@@ -50,13 +50,14 @@ try {
             status = 'pending',
             updated_at = CURRENT_TIMESTAMP
         WHERE id = :id
-        RETURNING *
     ");
     $updateStmt->execute([
         'id' => $complaintId
     ]);
     
-    $updatedComplaint = $updateStmt->fetch();
+    $stmt = $db->prepare("SELECT * FROM complaints WHERE id = :id");
+    $stmt->execute(['id' => $complaintId]);
+    $updatedComplaint = $stmt->fetch();
     
     $logStmt = $db->prepare("
         INSERT INTO activity_logs (complaint_id, user_id, action, old_value, new_value, description)

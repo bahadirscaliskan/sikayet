@@ -66,7 +66,6 @@ try {
     $stmt = $db->prepare("
         INSERT INTO comments (complaint_id, user_id, comment_text, is_internal)
         VALUES (:complaint_id, :user_id, :comment_text, :is_internal)
-        RETURNING id, complaint_id, user_id, comment_text, is_internal, created_at
     ");
     
     // PostgreSQL boolean için PDO::PARAM_BOOL kullan
@@ -76,6 +75,9 @@ try {
     $stmt->bindValue(':is_internal', $isInternal, PDO::PARAM_BOOL);
     $stmt->execute();
     
+    $id = $db->lastInsertId();
+    $stmt = $db->prepare("SELECT id, complaint_id, user_id, comment_text, is_internal, created_at FROM comments WHERE id = :id");
+    $stmt->execute(['id' => $id]);
     $comment = $stmt->fetch();
     if (!$comment) {
         Response::error('Yorum oluşturulamadı', 500);

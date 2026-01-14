@@ -45,12 +45,14 @@ try {
         $updateData['password_hash'] = password_hash($input['password'], PASSWORD_DEFAULT);
     }
     
-    $updateQuery .= ", updated_at = CURRENT_TIMESTAMP WHERE id = :id RETURNING id, email, full_name, phone, role";
+    $updateQuery .= ", updated_at = CURRENT_TIMESTAMP WHERE id = :id";
     
     $stmt = $db->prepare($updateQuery);
     $stmt->execute($updateData);
     
-    $updatedUser = $stmt->fetch();
+    $fetchStmt = $db->prepare("SELECT id, email, full_name, phone, role FROM users WHERE id = :id");
+    $fetchStmt->execute(['id' => $user['id']]);
+    $updatedUser = $fetchStmt->fetch();
     
     // Session'ı güncelle
     $_SESSION['user_name'] = $updatedUser['full_name'];

@@ -139,7 +139,6 @@ class Auth {
             $stmt = $this->db->prepare("
                 INSERT INTO users (email, password_hash, full_name, phone, address, role, verification_token)
                 VALUES (:email, :password_hash, :full_name, :phone, :address, 'citizen', :verification_token)
-                RETURNING id, email, full_name, role
             ");
             
             $stmt->execute([
@@ -151,6 +150,9 @@ class Auth {
                 'verification_token' => $verificationToken
             ]);
             
+            $id = $this->db->lastInsertId();
+            $stmt = $this->db->prepare("SELECT id, email, full_name, role FROM users WHERE id = :id");
+            $stmt->execute(['id' => $id]);
             $user = $stmt->fetch();
             
             // E-posta doğrulama maili gönder
